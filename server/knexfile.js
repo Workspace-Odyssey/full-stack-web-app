@@ -1,5 +1,3 @@
-require("dotenv").config({ path: "./.env.local"});
-
 const DB_USER = process.env.DB_USER;
 const DB_NAME = "notes_app";
 const DB_HOST = "127.0.0.1";
