@@ -1,6 +1,43 @@
 const nearbySearch = require('../util/nearbySearch')
 const getGeocodingData = require('../util/geocoding')
 const getDistance = require('../util/distance')
+const asyncHandler = require("express-async-handler");
+const Coworking = require('../models/coworkingModels');
+
+
+const registerCoworking = asyncHandler(async (req, res) => {
+    const {name, location} = req.body
+
+    if(!name || !location) {
+        res.status(400);
+        throw new Error('Fill out all the fields')
+    }
+    // Check if coworking exist
+    const coworkingExist = await Coworking.findOne({ name });
+    if(coworkingExist) {
+        res.status(400);
+        throw new Error('Coworking already exists');
+    }
+    
+    // Create new coworking profile
+    const [newCoworking] = await Coworking.create({
+        name,
+        location,
+    }, ["name", "location"])
+
+    if(newCoworking) {
+        req.session.coworkingId = newCoworking.id;
+        req.session.name = newCoworking.name;
+        req.session.location = newCoworking.session;
+
+        res.status(201).json({
+            message: 'Coworking registered successfully'
+        });
+    } else {
+        res.status(400);
+        throw new Error('Invalid user data')
+    }
+})
 
 async function getNearbyCoworkingSpaces (req, res) {
     const { location } = req.query;
@@ -52,4 +89,4 @@ async function getNearbyStation (req, res) {
 // 	}
 // }
 
-module.exports = { getNearbyCoworkingSpaces, getNearbyStation };
+module.exports = { getNearbyCoworkingSpaces, getNearbyStation, registerCoworking};

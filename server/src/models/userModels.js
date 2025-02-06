@@ -2,13 +2,14 @@ const knex = require('../knex');
 
 const User = {
 
-    findOne: async (query) => {
-        return knex('users').where(query).first();
+    findOne: async (email) => {
+        return knex('users').where(email).first();
     },
 
     create: async (data) => {
         return knex('users').insert(data).returning('*');
     }
 }
+
 
 module.exports = User;

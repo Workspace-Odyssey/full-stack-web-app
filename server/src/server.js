@@ -19,7 +19,8 @@ app.use(session({
 
 }));
 
-app.use('/user', authRoutes)
+app.use('/user', authRoutes);
+
 
 app.post('/reviews/submit', async (req, res) => {
 	const review = req.body;
