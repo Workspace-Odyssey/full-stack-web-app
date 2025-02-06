@@ -1,18 +1,15 @@
 const NEARBY_PLACES = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
 const apiKey = process.env.GOOGLE_MAPS_API_KEY;
 const axios = require('axios');
-const getGeocodingData = require('./geocoding')
 
-async function nearbySearch(address, keyword) {
-
-  const coordinates = await getGeocodingData(address);
+async function nearbySearch(coordinates, radius, keyword) {
 
   try {
     const response = await axios.get(NEARBY_PLACES, {
       params: { 
         key: apiKey,
         location: `${coordinates.lat},${coordinates.long}`,
-        radius: 500,
+        radius,
         keyword,
       },
     });
@@ -20,7 +17,7 @@ async function nearbySearch(address, keyword) {
     const results = response.data.results
 
     if (response.data.status === "OK" && results.length) {
-      const coworkingSpaces = results.map(place => {
+      const places = results.map(place => {
         return {
           "name": place.name,
           "address": place.vicinity,
@@ -28,15 +25,15 @@ async function nearbySearch(address, keyword) {
         }
       });
       
-      console.log(coworkingSpaces);
-      return coworkingSpaces;
+      console.log(places);
+      return places;
     } else {
        console.error(
-         "No co-working spaces nearby: " + response.data.status
+         `No ${keyword} nearby` + response.data.status
        );
     }   
   } catch (error) {
-    console.error('Error fetching co-working spaces:', error);
+    console.error(`Error fetching ${keyword}:`, error);
     throw error;
   }
 }
