@@ -2,7 +2,8 @@ const express = require('express');
 const session = require('express-session');
 const knex = require('./knex');
 const app = express();
-const coworkingSpacesRoutes = require('./routes/coworkingspaces.route')
+const coworkingSpacesRoutes = require('./routes/coworkingspaces.route');
+const authRoutes = require('./routes/authRoutes')
 
 const Reviews = require('./models/reviews.model')
 
@@ -14,9 +15,11 @@ app.use(session({
 	secret: process.env.EXPSECRET,
 	resave: false,
 	saveUninitialized: false,
-	cookie: {secure: false}
+	cookie: {secure: true}
 
 }));
+
+app.use('/user', authRoutes)
 
 app.post('/reviews/submit', async (req, res) => {
 	const review = req.body;
