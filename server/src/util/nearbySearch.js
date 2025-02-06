@@ -15,13 +15,17 @@ async function nearbySearch(coordinates, radius, keyword) {
     });
 
     const results = response.data.results
+    console.log(results[0].photos)
 
     if (response.data.status === "OK" && results.length) {
       const places = results.map(place => {
+
         return {
           "name": place.name,
           "address": place.vicinity,
           "coordinates": place.geometry.location,
+          "photo": place.photos && place.photos.length > 0
+            ? place.photos[0].photo_reference : undefined,
         }
       });
       

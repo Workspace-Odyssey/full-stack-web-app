@@ -35,4 +35,21 @@ async function getNearbyStation (req, res) {
 	}
 }
 
+//*********/
+
+// async function displayPhoto (req, res) {
+//     const { reference } = req.query;
+//     if (!reference) {
+//         return res.status(400).json({ error: 'Photo reference query parameter is required' });
+//     }
+
+// 	try {
+//         const photo = await getPhoto(reference)
+//         res.send(photo)
+
+// 	} catch (error) {
+// 		res.status(500).json({ error: error.message });
+// 	}
+// }
+
 module.exports = { getNearbyCoworkingSpaces, getNearbyStation };
