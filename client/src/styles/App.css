@@ -1,0 +1,56 @@
+:root {
+    --global-color-primary: #65558F;
+    --global-color-primary-muted: #4F4A70;
+    --global-color-secondary: #BDEDE0;
+}
+
+body{
+    margin: 0;
+    background-color: #F1F1F1;
+}
+
+#mainContainer {
+    margin-top: 50px;
+}
+
+.resultsHeader, #noResults {
+    display: flex;
+    gap: 10px;
+}
+
+.searchResultsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.cardContainer:last-child{
+    margin-bottom: 20px;
+}
+
+#noResults {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.primaryColor {
+    background-color: var(--global-color-primary);
+    border: 1px solid var(--global-color-primary);
+}
+
+.primaryColor:hover{
+    background-color: var(--global-color-primary-muted);
+    border: 1px solid var(--global-color-primary-muted);
+}
+
+.primaryOutline {
+    background-color: transparent;
+    color: var(--global-color-primary);
+    border: 1px solid var(--global-color-primary);
+}
+
+.primaryOutline:hover{
+    background-color: transparent;
+    color: var(--global-color-primary);
+}
