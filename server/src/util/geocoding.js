@@ -24,5 +24,5 @@ async function getGeocodingData(address) {
     }
 }
 
-module.exports = { getGeocodingData };
+module.exports = getGeocodingData;
   
