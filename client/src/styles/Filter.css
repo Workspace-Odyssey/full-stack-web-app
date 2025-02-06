@@ -1,0 +1,21 @@
+.ratingsFilter {
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 15px;
+    filter: drop-shadow(0 0 5px gray);
+}
+
+input[type=radio]:not(:checked) { 
+    outline: 2px solid gray; 
+}
+
+
+.filter-radio .form-check-input:checked {
+    background-color: var(--global-color-primary);
+    border-color: var(--global-color-primary);
+  }
+  
+.filter-radio .form-check-input:hover {
+    border-color: var(--global-color-primary-muted);
+  }
+  

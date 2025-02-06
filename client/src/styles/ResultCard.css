@@ -1,0 +1,24 @@
+.cardContent {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 15px;
+}
+
+#trainIcon {
+    display: flex;
+    align-items: center;
+}
+
+.cardViewBtn {
+    position: absolute;
+    bottom: 15px;
+}
+
+#cardThumbnail {
+    height: 300px;
+}
+
+.card, #cardThumbnail {
+    border-radius: 15px;
+}
+
