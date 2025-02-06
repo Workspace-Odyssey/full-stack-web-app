@@ -16,7 +16,6 @@ async function getDistance(origin, destination) {
     });
 
     const results = response.data.routes
-    console.log(results)
 
     if (response.data.status === 'OK' && results) {
 

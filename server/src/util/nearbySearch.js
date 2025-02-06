@@ -15,7 +15,6 @@ async function nearbySearch(coordinates, radius, keyword) {
     });
 
     const results = response.data.results
-    console.log(results[0].photos)
 
     if (response.data.status === "OK" && results.length) {
       const places = results.map(place => {
