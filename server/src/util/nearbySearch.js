@@ -25,7 +25,6 @@ async function nearbySearch(coordinates, radius, keyword) {
         }
       });
       
-      console.log(places);
       return places;
     } else {
        console.error(

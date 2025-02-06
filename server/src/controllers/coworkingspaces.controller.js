@@ -1,5 +1,6 @@
 const nearbySearch = require('../util/nearbySearch')
 const getGeocodingData = require('../util/geocoding')
+const getDistance = require('../util/distance')
 
 async function getNearbyCoworkingSpaces (req, res) {
     const { location } = req.query;
@@ -24,9 +25,11 @@ async function getNearbyStation (req, res) {
 
 	try {
         const coordinates = { lat, long };
-		const stations = await nearbySearch(coordinates, 10, 'station');
-        console.log(stations)
-		res.json(stations);
+		const nearestStation = await nearbySearch(coordinates, 10, 'station');
+        const nearestStationCoordinates = nearestStation[0].coordinates;
+
+        const distance = await getDistance(coordinates, nearestStationCoordinates)
+		res.json({ ...nearestStation[0], 'distance': distance });
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
