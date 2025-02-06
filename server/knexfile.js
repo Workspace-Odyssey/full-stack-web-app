@@ -1,7 +1,5 @@
-require("dotenv").config({ path: "./.env.local"});
-
 const DB_USER = process.env.DB_USER;
-const DB_NAME = "notes_app";
+const DB_NAME = "cwsdatabase";
 const DB_HOST = "127.0.0.1";
 const DB_PORT = "5432";
 const DB_URL = process.env.DB_URL
