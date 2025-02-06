@@ -2,10 +2,11 @@ const express = require('express');
 const session = require('express-session');
 const knex = require('./knex');
 const app = express();
+const coworkingSpacesRoutes = require('./routes/coworkingspaces.route')
 
-const Reviews = require('./reviews.model')
+const Reviews = require('./models/reviews.model')
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 
@@ -19,9 +20,11 @@ app.use(session({
 
 app.post('/reviews/submit', async (req, res) => {
 	const review = req.body;
-	const newReview = await Reviews.submit(review);
-	res.json(newReview);
+	await Reviews.submit(review);
+	res.json(review);
 })
+
+app.use('/coworking_spaces', coworkingSpacesRoutes);
 
 
 app.listen(PORT, () => {

@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/server.js",
-    "express-dev": "nodemon ./src/server.js",
+    "start": "dotenvx run -- node ./src/server.js",
+    "express-dev": "dotenvx run -- nodemon ./src/server.js",
     "migrate-latest": "knex migrate:latest",
     "migrate-down": "knex migrate:rollback",
     "seed-data": "knex seed:run",
@@ -16,6 +16,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.34.0",
+    "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
