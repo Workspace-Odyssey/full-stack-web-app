@@ -4,8 +4,7 @@ const knex = require('./knex');
 const app = express();
 const coworkingSpacesRoutes = require('./routes/coworkingspaces.route');
 const authRoutes = require('./routes/authRoutes')
-
-const Reviews = require('./models/reviews.model')
+const reviewsRoutes = require('./routes/reviews.route');
 
 const PORT = process.env.PORT;
 
@@ -20,14 +19,7 @@ app.use(session({
 }));
 
 app.use('/user', authRoutes);
-
-
-app.post('/reviews/submit', async (req, res) => {
-	const review = req.body;
-	await Reviews.submit(review);
-	res.json(review);
-})
-
+app.use('/reviews', reviewsRoutes);
 app.use('/coworking_spaces', coworkingSpacesRoutes);
 
 
