@@ -45,15 +45,18 @@ module.exports = {
         return knex
             .select({
                 id: `${REVIEW_TABLE}.id`,
-                coworkingId: `${REVIEW_TABLE}.coworking_id`,
                 rating: `${REVIEW_TABLE}.stars`,
                 datePosted: `${REVIEW_TABLE}.created_at`,
                 reviewText: `${REVIEW_TABLE}.content`,
+                username: 'u.username'
             })
             .from(REVIEW_TABLE)
-            .innerJoin('coworkings', function () {
-                this.on('coworkings.uuid', '=', `${REVIEW_TABLE}.coworking_id`);
-              })
+            .innerJoin('coworkings as c', function () {
+                this.on('c.uuid', '=', `${REVIEW_TABLE}.coworking_id`);
+            })
+            .innerJoin('users as u', function () {
+                this.on('u.uuid', '=', `${REVIEW_TABLE}.user_id`);
+            })
             .where({ [`${REVIEW_TABLE}.coworking_id`]: id })
             .orderBy(`${REVIEW_TABLE}.created_at`, 'desc')
     }
