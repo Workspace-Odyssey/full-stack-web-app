@@ -15,8 +15,8 @@ interface coworkingResultsObject {
   name: string,
   rating?: number,
   totalReviews?: number,
-  station?: string,
-  stationDistance?: number
+  station: string,
+  stationDistance: number
 }; 
 
 function App() {
