@@ -3,36 +3,34 @@ const getGeocodingData = require('../util/geocoding')
 const getDistance = require('../util/distance')
 const asyncHandler = require("express-async-handler");
 const Coworking = require('../models/coworkingModels');
+const Reviews = require('../models/reviews.model');
 
 
 const registerCoworking = asyncHandler(async (req, res) => {
-    const {name, location} = req.body
+    const coworkingSpace = req.body;
 
-    if(!name || !location) {
+    if(!coworkingSpace.name || !coworkingSpace.location) {
         res.status(400);
-        throw new Error('Fill out all the fields')
+        throw new Error('Fill out all the fields');
     }
+
     // Check if coworking exist
-    const coworkingExist = await Coworking.findOne({ name });
-    if(coworkingExist) {
+    const coworkingExist = await Coworking.findOne(coworkingSpace.name);
+    if (coworkingExist) {
         res.status(400);
         throw new Error('Coworking already exists');
     }
-    
+
     // Create new coworking profile
-    const [newCoworking] = await Coworking.create({
-        name,
-        location,
-    }, ["name", "location"])
+    const newCoworking = await Coworking.create(coworkingSpace);
 
-    if(newCoworking) {
-
+    if (newCoworking) {
         res.status(201).json({
-            message: 'Coworking registered successfully'
+            message: 'Coworking space registered successfully'
         });
     } else {
         res.status(400);
-        throw new Error('Invalid user data')
+        throw new Error('Invalid data')
     }
 })
 
@@ -44,15 +42,24 @@ async function getNearbyCoworkingSpaces (req, res) {
 
 	try {
         const coordinates = await getGeocodingData(location);
-		const listOfCoworkingSpaces = await nearbySearch(coordinates, 500, 'coworking space');
+		const listOfCoworkingSpaces = await nearbySearch(coordinates, 'coworking space');
 
         const promiseArrayOfCoworkingSpaces = await listOfCoworkingSpaces.map(async (coworkingSpace) => {
-            const nearbyStations = await nearbySearch(coworkingSpace.coordinates, 10, 'train_station|subway_station');
+            const nearbyStations = await nearbySearch(coworkingSpace.coordinates, 'train_station|subway_station');
             const nearestStation = nearbyStations[0]
             const nearestStationCoordinates = nearestStation.coordinates;
             const nearestStationName = nearestStation.name
+            
             const distance = await getDistance(coworkingSpace.coordinates, nearestStationCoordinates);
-            console.log( { ...coworkingSpace, nearestStationName, distance} )
+
+            const coworkingSpaceID = await Coworking.findByGooglePlaceID(coworkingSpace.placeID);
+
+            if (coworkingSpaceID) {
+                const stars = await Reviews.getAverageRatingByCoWorkingId(coworkingSpaceID.uuid);
+                const numOfRatings = await Reviews.getNumberOfRatingsByCoWorkingId(coworkingSpaceID.uuid);
+                return { ...coworkingSpace, nearestStationName, distance, stars, numOfRatings}
+            }
+
             return { ...coworkingSpace, nearestStationName, distance}
         })
 
