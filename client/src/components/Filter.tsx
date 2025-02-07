@@ -2,18 +2,39 @@ import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import "../styles/Filter.css";
 
-
 interface filterProps {
-  resultsLength: number 
+  resultsLength: number,
+  searchResults: coworkingResultsObject[],
+  setSearchResults: React.Dispatch<React.SetStateAction<coworkingResultsObject[]>>
 };
 
-const Filter: React.FC<filterProps> = ({ resultsLength }) => {
+const Filter: React.FC<filterProps> = ({ resultsLength, searchResults, setSearchResults }) => {
 
   const [selectedFilter, setSelectedFilter] = useState<string>();
-  
-  //added this block for now to run build
+
   useEffect(() => {
-    console.log(selectedFilter);
+    function sortSearchResultsByRating(order:string) {
+      const sorted = [...searchResults].sort((a, b) => {
+        const ratingA = a.rating || 0;
+        const ratingB = b.rating || 0;
+
+        // Sorting based on the 'order' parameter
+        if (order === 'desc') {
+          return ratingB - ratingA; 
+        } else if (order === 'asc') {
+          return ratingA - ratingB;
+        } 
+        return 0;
+      });
+      return sorted;
+    };
+
+    // Check the selected filter and apply sorting
+    if (selectedFilter === 'lowToHigh') {
+      setSearchResults(sortSearchResultsByRating('asc'));
+    } else if (selectedFilter === 'highToLow') {
+      setSearchResults(sortSearchResultsByRating('desc'));
+    }  
   }, [selectedFilter])
 
   return (

@@ -49,7 +49,7 @@ function App() {
       <Row id="mainContainer">
         <Col xs={4}>
           <h3>☆ Ratings</h3>
-          <Filter resultsLength={searchResults.length}/>
+          <Filter resultsLength={searchResults.length} searchResults={searchResults} setSearchResults={setSearchResults}/>
         </Col>
         <Col xs={5}>
         {/* If no data is set in searchResults state, "no Results" message is displayed to the user */}
