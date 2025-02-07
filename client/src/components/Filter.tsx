@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import "../styles/Filter.css";
 
@@ -9,6 +9,11 @@ interface filterProps {
 const Filter: React.FC<filterProps> = ({ resultsLength }) => {
 
   const [selectedFilter, setSelectedFilter] = useState<string>();
+
+  //added this block for now to run build
+  useEffect(() => {
+    console.log(selectedFilter);
+  }, [selectedFilter])
 
   return (
     <div className="ratingsFilter w-50 p-3">

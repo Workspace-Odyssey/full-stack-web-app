@@ -32,7 +32,14 @@ const Header: React.FC<HeaderProps> = ({ setSearchedCity }) => {
                 type="text"
                 placeholder="Search"
                 className=" mr-sm-2"
-                onChange={(event) => setSearchedCity(event.target.value)}
+                onKeyDown={
+                  (event: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault();
+                      setSearchedCity((event.target as HTMLInputElement).value)
+                    }
+                  }
+                }
               />
             </Col>
           </Row>
