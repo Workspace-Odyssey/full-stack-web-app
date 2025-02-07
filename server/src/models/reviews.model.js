@@ -33,12 +33,16 @@ module.exports = {
         return knex(REVIEW_TABLE)
             .count('* as number_of_ratings')
             .where({ 'coworking_id': id })
+            .first()
+            .then(result => result.number_of_ratings)
     },
 
     getAverageRatingByCoWorkingId(id) {
         return knex(REVIEW_TABLE)
             .avg('stars as average_rating')
             .where({ 'coworking_id': id })
+            .first()
+            .then(result => result.average_rating)
     },
 
     filterByCoWorkingId(id) {
