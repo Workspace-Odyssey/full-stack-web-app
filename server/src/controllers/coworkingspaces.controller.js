@@ -45,25 +45,19 @@ async function getNearbyCoworkingSpaces (req, res) {
 	try {
         const coordinates = await getGeocodingData(location);
 		const listOfCoworkingSpaces = await nearbySearch(coordinates, 500, 'coworking space');
-		res.json(listOfCoworkingSpaces);
-	} catch (error) {
-		res.status(500).json({ error: error.message });
-	}
-}
 
-async function getNearbyStation (req, res) {
-    const { lat, long } = req.query;
-    if (!lat && !long) {
-        return res.status(400).json({ error: 'Latitude and longitude query parameters are required' });
-    }
+        const promiseArrayOfCoworkingSpaces = await listOfCoworkingSpaces.map(async (coworkingSpace) => {
+            const nearbyStations = await nearbySearch(coworkingSpace.coordinates, 10, 'train_station|subway_station');
+            const nearestStation = nearbyStations[0]
+            const nearestStationCoordinates = nearestStation.coordinates;
+            const nearestStationName = nearestStation.name
+            const distance = await getDistance(coworkingSpace.coordinates, nearestStationCoordinates);
+            console.log( { ...coworkingSpace, nearestStationName, distance} )
+            return { ...coworkingSpace, nearestStationName, distance}
+        })
 
-	try {
-        const coordinates = { lat, long };
-		const nearestStation = await nearbySearch(coordinates, 10, 'station');
-        const nearestStationCoordinates = nearestStation[0].coordinates;
-
-        const distance = await getDistance(coordinates, nearestStationCoordinates)
-		res.json({ ...nearestStation[0], 'distance': distance });
+        Promise.all(promiseArrayOfCoworkingSpaces)
+            .then((array) => res.json(array))
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
@@ -86,4 +80,4 @@ async function getNearbyStation (req, res) {
 // 	}
 // }
 
-module.exports = { getNearbyCoworkingSpaces, getNearbyStation, registerCoworking};
+module.exports = { getNearbyCoworkingSpaces, registerCoworking};

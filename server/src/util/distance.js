@@ -9,7 +9,7 @@ async function getDistance(origin, destination) {
       params: { 
         key: apiKey,
         origin: `${origin.lat},${origin.long}`,
-        destination: `${destination.lat.toString()},${destination.lng.toString()}`,
+        destination: `${destination.lat.toString()},${destination.long.toString()}`,
         mode: 'walking',
         units: 'metric',
       },
