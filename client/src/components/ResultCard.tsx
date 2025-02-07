@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import "../styles/ResultCard.css";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
@@ -5,12 +6,14 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { FaStar } from "react-icons/fa";
 import { FaTrain } from "react-icons/fa";
+import fetchPhotoByPhotoReference from '../api/coworkingPhoto';
+import { AxiosError } from 'axios';
 
 interface ResultCardProps {
-  photo: string,
+  photo?: string,
   title: string,
-  rating: number,
-  totalReviews: number,
+  rating?: number,
+  totalReviews?: number,
   nearestStation: string,
   stationDistance: number
 };
@@ -35,11 +38,23 @@ const ResultCard: React.FC<ResultCardProps> = ({
     grey: "a9a9a9"
   };
 
+  //States
+  const [photoUrl, setPhotoUrl] = useState<string|undefined>(undefined);
+
+  //Effects
+  useEffect(() => {
+    if (photo) {
+      fetchPhotoByPhotoReference(`coworking_spaces/photo?photo_reference=${photo}`)
+        .then((url:string) => setPhotoUrl(url))
+        .catch((error: AxiosError) => console.error('Error fetching photo: ', error.response?.data || error.message));
+    }
+  }, [photo]);
+
   return (
     <Card className="cardContainer">
       <Row>
         <Col>
-          <Card.Img id="cardThumbnail" variant="top" src={photo} />
+          <Card.Img id="cardThumbnail" variant="top" src={photoUrl} />
         </Col>
         <Col>
           <Card.Body>
@@ -49,7 +64,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
                 <FaStar
                   key={index}
                   size={24}
-                  color={rating > index ? starColor.orange : starColor.grey}
+                  color={rating != undefined && rating > index ? starColor.orange : starColor.grey}
                 />
               ))}
               <Card.Text>{`(${
