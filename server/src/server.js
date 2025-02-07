@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const knex = require('./knex');
+const cors = require("cors");
 const app = express();
 const coworkingSpacesRoutes = require('./routes/coworkingspaces.route');
 const authRoutes = require('./routes/authRoutes')
@@ -9,6 +10,7 @@ const reviewsRoutes = require('./routes/reviews.route');
 const PORT = process.env.PORT;
 
 app.use(express.json());
+app.use(cors());
 
 app.use(session({
 	secret: process.env.EXPSECRET,

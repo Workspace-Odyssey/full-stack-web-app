@@ -2,15 +2,15 @@ const NEARBY_PLACES = 'https://maps.googleapis.com/maps/api/place/nearbysearch/j
 const apiKey = process.env.GOOGLE_MAPS_API_KEY;
 const axios = require('axios');
 
-async function nearbySearch(coordinates, radius, keyword) {
+async function nearbySearch(coordinates, keyword) {
 
   try {
     const response = await axios.get(NEARBY_PLACES, {
       params: { 
         key: apiKey,
         location: `${coordinates.lat},${coordinates.long}`,
-        radius,
         keyword,
+        rankby: 'distance',
       },
     });
 
@@ -22,7 +22,11 @@ async function nearbySearch(coordinates, radius, keyword) {
         return {
           "name": place.name,
           "address": place.vicinity,
-          "coordinates": place.geometry.location,
+          "placeID": place.place_id,
+          "coordinates": { 
+            "lat": place.geometry.location.lat,
+            "long": place.geometry.location.lng,
+          },
           "photo": place.photos && place.photos.length > 0
             ? place.photos[0].photo_reference : undefined,
         }
