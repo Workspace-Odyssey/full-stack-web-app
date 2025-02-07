@@ -26,9 +26,6 @@ const registerCoworking = asyncHandler(async (req, res) => {
     }, ["name", "location"])
 
     if(newCoworking) {
-        req.session.coworkingId = newCoworking.id;
-        req.session.name = newCoworking.name;
-        req.session.location = newCoworking.session;
 
         res.status(201).json({
             message: 'Coworking registered successfully'
