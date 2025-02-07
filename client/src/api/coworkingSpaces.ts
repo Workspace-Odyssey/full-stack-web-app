@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const instance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
-    timeout: 5000,
+    timeout: 3000,
 });
 
 interface coworkingResultsObject {
@@ -24,6 +24,9 @@ async function fetchNearbyCoworkingSpaces (endpoint: string) : Promise<Array<cow
                     name: coworking.name,
                     station: coworking.nearestStationName,
                     stationDistance: coworking.distance,
+                    rating: coworking.stars,
+                    totalReviews: coworking.numOfRatings,
+                    photo: coworking.photo,
                 }
                 return coworkingSpace;
             })
