@@ -11,12 +11,11 @@ async function getGeocodingData(address) {
   
       const results = response.data.results
   
-      if (response.data.status === "OK" && results && results[0]) {
-         return {"long": results[0].geometry.location.lng, "lat": results[0].geometry.location.lat}
+      if (response.data.status === 'OK' && results && results[0]) {
+          const { lat, lng } = results[0].geometry.location;
+          return { lat, 'long': lng };
       } else {
-         console.error(
-           "Error fetching coordinates from geocoding: " + response.data.status
-         );
+          console.error(`Error fetching coordinates: ${response.data.status}`);
       }   
     } catch (error) {
       console.error('Error in geocoding service:', error);
