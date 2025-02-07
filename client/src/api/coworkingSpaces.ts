@@ -17,23 +17,24 @@ interface coworkingResultsObject {
 async function fetchNearbyCoworkingSpaces (endpoint: string) : Promise<Array<coworkingResultsObject>> {
     try {
         const response = await instance.get(endpoint);
+
+        // Check if the response contains an array of coworking spaces
         if (Array.isArray(response.data)) {
             return response.data.map((coworking: any) => {
-                console.log(coworking)
-                const coworkingSpace = {
+
+                return {
                     name: coworking.name,
                     station: coworking.nearestStationName,
-                    stationDistance: coworking.distance,
-                    rating: coworking.stars,
-                    totalReviews: coworking.numOfRatings,
+                    stationDistance: coworking.distanceToStation,
+                    rating: coworking.averageRating,
+                    totalReviews: coworking.totalReviews,
                     photo: coworking.photo,
-                }
-                return coworkingSpace;
+                };
             })
         }
         return [];
     } catch (error) {
-        console.error('Error fetching data: ', error);
+        console.error('Error fetching coworking spaces data: ', error);
         throw error;
     }
 }
