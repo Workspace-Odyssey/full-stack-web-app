@@ -3,7 +3,7 @@ const session = require('express-session');
 const knex = require('./knex');
 const app = express();
 const coworkingSpacesRoutes = require('./routes/coworkingspaces.route');
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRoutes')
 const reviewsRoutes = require('./routes/reviews.route');
 
 const PORT = process.env.PORT;

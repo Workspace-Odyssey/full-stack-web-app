@@ -4,9 +4,9 @@ const asyncHandler = require("express-async-handler");
 
 // Register
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password} = req.body
+    const { username, email, password} = req.body
 
-    if(!name || !email || !password) {
+    if(!username || !email || !password) {
         res.status(400);
         throw new Error('Fill out all the fields');
     }
@@ -22,14 +22,14 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // Create user
     const [newUser] = await User.create({
-        name,
+        username,
         email,
         password: hashedPassword,
-    })
+    }, ["username", "email", "password"])
 
     if(newUser) {
         req.session.userId = newUser.id;
-        req.session.username = newUser.name;
+        req.session.username = newUser.username;
 
         res.status(201).json({
             message: 'User registered successfully'
@@ -62,7 +62,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     req.session.userId = user.id;
-    req.session.username = user.name;
+    req.session.username = user.username;
 
     res.status(200).json({ message: 'Login successful'})
 })
