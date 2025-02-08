@@ -34,12 +34,6 @@ function App() {
     }
   }, [searchedCity])
 
-  //remember to delete before pushing
-  useEffect(() => {
-    console.log(searchResults);
-  }, [])
-  
-
   return (
     <>
     {/* Search Bar values are set in state from setSearchCity function */}
