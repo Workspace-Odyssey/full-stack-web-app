@@ -33,12 +33,6 @@ function App() {
     }
   }, [searchedCity])
 
-  //remember to delete before pushing
-  useEffect(() => {
-    console.log(searchResults);
-  }, [])
-  
-
   return (
     <>
     <Header setSearchedCity={setSearchedCity}/>
