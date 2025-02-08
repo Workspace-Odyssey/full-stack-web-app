@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { coworkingResultsObject } from '../components/App'
 
+// Create an Axios instance with base URL and timeout settings
 const instance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
     timeout: 3000,

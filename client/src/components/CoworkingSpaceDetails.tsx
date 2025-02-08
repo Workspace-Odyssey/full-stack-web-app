@@ -27,11 +27,13 @@ const CoworkingSpaceDetails:React.FC<coworkingSpaceDetailsProps> = ({ currentCow
     grey: "a9a9a9"
   };
 
+  // Formatter for the rating to always display 2 decimal places
   const formattedRating = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
 
+  // Fetch reviews when the coworking space is in the database
   if (currentCoworkingSpace && currentCoworkingSpace.id) {
     fetchReviewsByCoworkingSpaceId (`reviews/${currentCoworkingSpace.id}`)
         .then(data => setReviews(Array.isArray(data) ? data : []))
@@ -42,22 +44,29 @@ const CoworkingSpaceDetails:React.FC<coworkingSpaceDetailsProps> = ({ currentCow
     <>
         { currentCoworkingSpace && (
             <div>
-                {/* Allows for easy navigation back to the search results list */}
+                {/* Allows for easy navigation back to the search results */}
                 <Breadcrumb>
                     <Breadcrumb.Item onClick={() => setCurrentView('results')}>{searchedCity}
                     </Breadcrumb.Item>
                     <Breadcrumb.Item active>{currentCoworkingSpace.name}</Breadcrumb.Item>
                 </Breadcrumb>
+
+                {/* Display coworking space photo */}
                 {currentCoworkingSpace.photo && <Image src={currentCoworkingSpace.photo} fluid rounded />}
+
+                {/* Display coworking space name and address */}
                 <h1 className='name'>{currentCoworkingSpace.name.trim()}</h1>
                 <p className='address'>{currentCoworkingSpace.address.trim()}</p>
+
+                {/* Show reviews section */}
                 <h3>Reviews for {currentCoworkingSpace.name}</h3>
 
-                {/* Displays overall rating and number of reviews if available */}
+                {/* Render overall rating and star icons if available */}
                 {currentCoworkingSpace.rating ?  
                     (<div className='reviews'> 
                         <p className='overall-rating'>{formattedRating.format(currentCoworkingSpace.rating)}</p>
                         <div className='stars'>
+                            {/* Map over stars array to display individual star icons */}
                             {stars.map((_, index) => (
                                 <FaStar
                                 key={index}
@@ -68,15 +77,17 @@ const CoworkingSpaceDetails:React.FC<coworkingSpaceDetailsProps> = ({ currentCow
                         </div>
                         <p className='total-reviews'>({currentCoworkingSpace.totalReviews} reviews)</p>
                     </div>)
-                    : <p>No reviews</p>
+                    : <p>No reviews</p> // If no rating, show "No reviews"
                 }
 
+                {/* Render reviews if any exist */}
                 <p className='post-review'>Are you a member?</p>
                 <Button className="primaryOutline" >POST A REVIEW</Button>
 
                 {/* Displays each review in detail */}
                 <div className='reviews-container'>
                     <h5>Recent Reviews</h5>
+                    {/* Map over reviews and display each one */}
                     {reviews.length > 0 && reviews.map(review => {
                         const date:string = new Date(review.datePosted).toLocaleDateString('en-US', {
                             year:'numeric',
@@ -89,6 +100,7 @@ const CoworkingSpaceDetails:React.FC<coworkingSpaceDetailsProps> = ({ currentCow
                                     <FontAwesomeIcon icon={faUser} className='user-icon'/>
                                     {review.username}
                                     <div>
+                                        {/* Map over stars to display the user's rating for the review */}
                                         {stars.map((_, index) => (
                                             <FaStar
                                             key={index}
