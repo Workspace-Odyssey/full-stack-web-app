@@ -10,9 +10,10 @@ import "../styles/Header.css";
 type HeaderProps = {
   setSearchedCity: React.Dispatch<React.SetStateAction<string>>
   setSelectedAuth: React.Dispatch<React.SetStateAction<string>>
+  setCurrentView: React.Dispatch<React.SetStateAction<string>>
 };
 
-const Header: React.FC<HeaderProps> = ({ setSearchedCity, setSelectedAuth }) => {
+const Header: React.FC<HeaderProps> = ({ setSearchedCity, setSelectedAuth, setCurrentView }) => {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -40,6 +41,7 @@ const Header: React.FC<HeaderProps> = ({ setSearchedCity, setSelectedAuth }) => 
                     if (event.key === 'Enter') {
                       event.preventDefault();
                       setSearchedCity((event.target as HTMLInputElement).value)
+                      setCurrentView('resultsPage')
                     }
                   }
                 }
@@ -50,11 +52,16 @@ const Header: React.FC<HeaderProps> = ({ setSearchedCity, setSelectedAuth }) => 
         {/* Auth Buttons */}
         <Row>
           <Col xs="auto">
-            <Button id="Login" className="primaryColor" onClick={(event) => 
-              setSelectedAuth(event.currentTarget.id)}>Login</Button>
+            <Button id="Login" className="primaryColor" onClick={(event) => {
+              setSelectedAuth(event.currentTarget.id);
+              setCurrentView('loginPage');
+            }}>Login</Button>
           </Col>
           <Col>
-            <Button id="Register" className="primaryOutline" onClick={(event) => setSelectedAuth(event.currentTarget.id)}>Register</Button>
+            <Button id="Register" className="primaryOutline" onClick={(event) => {
+              setSelectedAuth(event.currentTarget.id);
+              setCurrentView('loginPage');
+            }}>Register</Button>
           </Col>
         </Row>
       </Container>

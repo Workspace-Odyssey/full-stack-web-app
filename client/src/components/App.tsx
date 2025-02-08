@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Header from "./Header";
-// import Login_Register from "./Login_Register";
+import Login_Register from "./Login_Register";
 import Filter from "./Filter";
 import ResultCard from './ResultCard';
 import CoworkingSpaceDetails from './CoworkingSpaceDetails';
@@ -43,11 +43,12 @@ function App() {
   return (
     <>
     {/* Search Bar values are set in state from setSearchCity function */}
-    <Header setSearchedCity={setSearchedCity} setSelectedAuth={setSelectedAuth}/>
+    <Header setSearchedCity={setSearchedCity} setSelectedAuth={setSelectedAuth} setCurrentView={setCurrentView}/>
     <Container>
-      {/* <Login_Register selectedAuth={selectedAuth}/> */}
+      
       <Row id="mainContainer">
-      { currentView === 'detailsPage' ? <CoworkingSpaceDetails currentCoworkingSpace={currentCoworkingSpace} searchedCity={searchedCity} setCurrentView={setCurrentView}/> : (
+      { currentView === 'detailsPage' ? <CoworkingSpaceDetails currentCoworkingSpace={currentCoworkingSpace} searchedCity={searchedCity} setCurrentView={setCurrentView}/> : 
+      currentView === 'loginPage' ? <Login_Register selectedAuth={selectedAuth}/> : currentView === 'resultsPage' ? (
         <>
           <Col xs={4}>
             <h3>☆ Ratings</h3>
@@ -88,7 +89,7 @@ function App() {
             }
           </Col>
         </>
-      )}
+      ): <></>}
       </Row>
     </Container>
     </>
