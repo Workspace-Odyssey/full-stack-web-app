@@ -67,6 +67,7 @@ async function getNearbyCoworkingSpaces (req, res) {
             const coworkingSpaceID = await Coworking.findByGooglePlaceID(coworkingSpace.placeID);
 
             if (coworkingSpaceID) {
+<<<<<<< HEAD
 
                 const uuid = coworkingSpaceID.uuid;
 
@@ -75,6 +76,13 @@ async function getNearbyCoworkingSpaces (req, res) {
                 const totalReviews = await Reviews.getNumberOfRatingsByCoWorkingId(uuid);
 
                 return { ...coworkingSpace, nearestStationName, distanceToStation, averageRating, totalReviews, uuid };
+=======
+                // Fetch reviews data (average rating and number of ratings)
+                const averageRating = await Reviews.getAverageRatingByCoWorkingId(coworkingSpaceID.uuid);
+                const totalReviews = await Reviews.getNumberOfRatingsByCoWorkingId(coworkingSpaceID.uuid);
+                
+                return { ...coworkingSpace, nearestStationName, distanceToStation, averageRating, totalReviews };
+>>>>>>> 5d27311 (chore: rename variable names and add comments)
             }
 
             // Return coworking space details without review data if no record found
