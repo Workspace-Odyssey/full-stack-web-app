@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import "../styles/Filter.css";
+import { coworkingResultsObject } from './App'
 
 interface filterProps {
   resultsLength: number,
