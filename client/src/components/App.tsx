@@ -7,6 +7,7 @@ import Header from "./Header";
 import Filter from "./Filter";
 import ResultCard from './ResultCard';
 import { TbMoodSad } from "react-icons/tb";
+// import LandingPage from './LandingPage';
 
 
 interface coworkingResultsObject {
@@ -27,6 +28,7 @@ const [searchResults, setSearchResults] = useState<coworkingResultsObject[]>([])
     <>
     <Header setSearchedCity={setSearchedCity}/>
     <Container>
+      {/* <LandingPage/> */}
       <Row id="mainContainer">
         <Col xs={4}>
           <h3>☆ Ratings</h3>
