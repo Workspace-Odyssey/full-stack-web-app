@@ -40,11 +40,6 @@ function App() {
     }
   }, [searchedCity])
 
-  //delete later
-  useEffect(() => {
-    console.log(currentCoworkingSpace)
-  }, [currentCoworkingSpace])
-
   return (
     <>
     {/* Search Bar values are set in state from setSearchCity function */}
