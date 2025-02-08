@@ -4,6 +4,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Header from "./Header";
+// import Login_SignUp from "./Login_SignUp";
 import Filter from "./Filter";
 import ResultCard from './ResultCard';
 import { TbMoodSad } from "react-icons/tb";
@@ -22,12 +23,14 @@ function App() {
 
 const [searchedCity, setSearchedCity] = useState<string>("");
 const [searchResults, setSearchResults] = useState<coworkingResultsObject[]>([]);
+const [selectedAuth, setSelectedAuth] = useState<string>("Login");
 
   return (
     <>
     {/* Search Bar values are set in state from setSearchCity function */}
-    <Header setSearchedCity={setSearchedCity}/>
+    <Header setSearchedCity={setSearchedCity} setSelectedAuth={setSelectedAuth}/>
     <Container>
+      {/* <Login_SignUp selectedAuth={selectedAuth}/> */}
       <Row id="mainContainer">
         <Col xs={4}>
           <h3>☆ Ratings</h3>

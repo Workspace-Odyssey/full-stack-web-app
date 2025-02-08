@@ -9,9 +9,10 @@ import "../styles/Header.css";
 
 type HeaderProps = {
   setSearchedCity: React.Dispatch<React.SetStateAction<string>>
+  setSelectedAuth: React.Dispatch<React.SetStateAction<string>>
 };
 
-const Header: React.FC<HeaderProps> = ({ setSearchedCity }) => {
+const Header: React.FC<HeaderProps> = ({ setSearchedCity, setSelectedAuth }) => {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -42,10 +43,11 @@ const Header: React.FC<HeaderProps> = ({ setSearchedCity }) => {
         {/* Auth Buttons */}
         <Row>
           <Col xs="auto">
-            <Button className="primaryColor">Login</Button>
+            <Button id="Login" className="primaryColor" onClick={(event) => 
+              setSelectedAuth(event.currentTarget.id)}>Login</Button>
           </Col>
           <Col>
-            <Button className="primaryOutline" >Sign Up</Button>
+            <Button id="Register" className="primaryOutline" onClick={(event) => setSelectedAuth(event.currentTarget.id)}>Register</Button>
           </Col>
         </Row>
       </Container>
