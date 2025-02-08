@@ -1,0 +1,3 @@
+.btn:first-child:active {
+    background-color: var(--global-color-primary);
+}

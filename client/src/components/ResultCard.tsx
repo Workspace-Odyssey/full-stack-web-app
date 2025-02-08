@@ -31,8 +31,11 @@ const ResultCard: React.FC<ResultCardProps> = ({
   nearestStation,
   stationDistance,
 }) => {
+  
+  // Array needed to loop through for correct stars amount.
   const stars: number[] = [0, 0, 0, 0, 0];
 
+  // Colors to use for stars Icon
   const starColor: starIconColor = {
     orange: "#F2C265",
     grey: "a9a9a9"
@@ -54,12 +57,15 @@ const ResultCard: React.FC<ResultCardProps> = ({
     <Card className="cardContainer">
       <Row>
         <Col>
+        {/* Coworking space Image */}
           <Card.Img id="cardThumbnail" variant="top" src={photoUrl} />
         </Col>
         <Col>
+        {/* Card Body for all content */}
           <Card.Body>
             <Card.Title>{title}</Card.Title>
             <div className="cardContent">
+              {/* Correctly display and shade the star icon based on the rating passed in */}
               {stars.map((_, index) => (
                 <FaStar
                   key={index}
@@ -67,6 +73,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
                   color={rating != undefined && rating > index ? starColor.orange : starColor.grey}
                 />
               ))}
+              {/* Display the total reviews the coworking space has */}
               <Card.Text>{`(${
                 totalReviews == undefined ? 0 : totalReviews
               })`}</Card.Text>
@@ -75,6 +82,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
               <div id="trainIcon">
                 <FaTrain />
               </div>
+              {/* Display the station info for the passed in station*/}
               <Card.Text>
                 {nearestStation} {stationDistance} m
               </Card.Text>
