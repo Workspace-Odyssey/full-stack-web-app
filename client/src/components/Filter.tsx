@@ -6,10 +6,11 @@ import "../styles/Filter.css";
 interface filterProps {
   resultsLength: number 
 };
+
 const Filter: React.FC<filterProps> = ({ resultsLength }) => {
 
   const [selectedFilter, setSelectedFilter] = useState<string>();
-
+  
   return (
     <div className="ratingsFilter w-50 p-3">
       <Form>
