@@ -20,7 +20,7 @@ async function submitReview (req, res) {
     try {
         const user_id = req.session.user.id; // Retrieve the UUID from the session
         const { coworking_id } = req.params;
-        const review = req.body;
+        const { reviewText, rating, datePosted } = req.body;
         
         await Reviews.submit({ 
             'created_at': datePosted,
