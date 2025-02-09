@@ -1,0 +1,10 @@
+.authContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.loginSignUpBtn, .loginSignUpBtn:hover, .loginSignUpBtn:first-child:active{
+    background-color: var(--global-color-primary);
+}

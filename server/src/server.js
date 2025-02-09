@@ -1,14 +1,16 @@
 const express = require('express');
 const session = require('express-session');
+const cors = require("cors");
 const knex = require('./knex');
-const app = express();
-const coworkingSpacesRoutes = require('./routes/coworkingspaces.route');
+const coworkingSpacesRoutes = require('./routes/coworkingSpaceRoutes');
 const authRoutes = require('./routes/authRoutes')
-const reviewsRoutes = require('./routes/reviews.route');
+const reviewsRoutes = require('./routes/reviewRoutes');
 
 const PORT = process.env.PORT;
+const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.use(session({
 	secret: process.env.EXPSECRET,

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import "../styles/ResultCard.css";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
@@ -5,12 +6,14 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { FaStar } from "react-icons/fa";
 import { FaTrain } from "react-icons/fa";
+import fetchPhotoByPhotoReference from '../api/coworkingPhoto';
+import { AxiosError } from 'axios';
 
 interface ResultCardProps {
-  photo: string,
+  photo?: string,
   title: string,
-  rating: number,
-  totalReviews: number,
+  rating?: number,
+  totalReviews?: number,
   nearestStation: string,
   stationDistance: number
 };
@@ -28,30 +31,49 @@ const ResultCard: React.FC<ResultCardProps> = ({
   nearestStation,
   stationDistance,
 }) => {
+  
+  // Array needed to loop through for correct stars amount.
   const stars: number[] = [0, 0, 0, 0, 0];
 
+  // Colors to use for stars Icon
   const starColor: starIconColor = {
     orange: "#F2C265",
     grey: "a9a9a9"
   };
 
+  //States
+  const [photoUrl, setPhotoUrl] = useState<string|undefined>(undefined);
+
+  //Effects
+  useEffect(() => {
+    if (photo) {
+      fetchPhotoByPhotoReference(`coworking_spaces/photo?photo_reference=${photo}`)
+        .then((url:string) => setPhotoUrl(url))
+        .catch((error: AxiosError) => console.error('Error fetching photo: ', error.response?.data || error.message));
+    }
+  }, [photo]);
+
   return (
     <Card className="cardContainer">
       <Row>
         <Col>
-          <Card.Img id="cardThumbnail" variant="top" src={photo} />
+        {/* Coworking space Image */}
+          <Card.Img id="cardThumbnail" variant="top" src={photoUrl} />
         </Col>
         <Col>
+        {/* Card Body for all content */}
           <Card.Body>
             <Card.Title>{title}</Card.Title>
             <div className="cardContent">
+              {/* Correctly display and shade the star icon based on the rating passed in */}
               {stars.map((_, index) => (
                 <FaStar
                   key={index}
                   size={24}
-                  color={rating > index ? starColor.orange : starColor.grey}
+                  color={rating != undefined && rating > index ? starColor.orange : starColor.grey}
                 />
               ))}
+              {/* Display the total reviews the coworking space has */}
               <Card.Text>{`(${
                 totalReviews == undefined ? 0 : totalReviews
               })`}</Card.Text>
@@ -60,6 +82,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
               <div id="trainIcon">
                 <FaTrain />
               </div>
+              {/* Display the station info for the passed in station*/}
               <Card.Text>
                 {nearestStation} {stationDistance} m
               </Card.Text>
