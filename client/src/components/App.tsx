@@ -10,7 +10,13 @@ import ResultCard from './ResultCard';
 import { TbMoodSad } from "react-icons/tb";
 import fetchNearbyCoworkingSpaces from '../api/coworkingSpaces';
 
+
+
+// import LandingPage from './LandingPage';
+
+
 // Coworking Result Object Structure
+
 interface coworkingResultsObject {
   photo?: string,
   name: string,
@@ -41,7 +47,11 @@ function App() {
     {/* Search Bar values are set in state from setSearchCity function */}
     <Header setSearchedCity={setSearchedCity} setSelectedAuth={setSelectedAuth}/>
     <Container>
+
+      {/* <LandingPage/> */}
+
       {/* <Login_Register selectedAuth={selectedAuth}/> */}
+
       <Row id="mainContainer">
         <Col xs={4}>
           <h3>☆ Ratings</h3>
