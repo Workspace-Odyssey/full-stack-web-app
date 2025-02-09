@@ -7,8 +7,9 @@ import Header from "./Header";
 import Filter from "./Filter";
 import ResultCard from './ResultCard';
 import { TbMoodSad } from "react-icons/tb";
-// import LandingPage from './LandingPage';
 
+
+// import LandingPage from './LandingPage';
 
 interface coworkingResultsObject {
   photo: string,
