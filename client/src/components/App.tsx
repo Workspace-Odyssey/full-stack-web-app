@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import "../styles/App.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -8,22 +8,33 @@ import Header from "./Header";
 import Filter from "./Filter";
 import ResultCard from './ResultCard';
 import { TbMoodSad } from "react-icons/tb";
+import fetchNearbyCoworkingSpaces from '../api/coworkingSpaces';
 
 // Coworking Result Object Structure
 interface coworkingResultsObject {
-  photo: string,
+  photo?: string,
   name: string,
-  rating: number,
-  totalReviews: number,
+  rating?: number,
+  totalReviews?: number,
   station: string,
   stationDistance: number
-};
+}; 
 
 function App() {
 
-const [searchedCity, setSearchedCity] = useState<string>("");
-const [searchResults, setSearchResults] = useState<coworkingResultsObject[]>([]);
-const [selectedAuth, setSelectedAuth] = useState<string>("Login");
+  //States
+  const [searchedCity, setSearchedCity] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<coworkingResultsObject[]>([]);
+  const [selectedAuth, setSelectedAuth] = useState<string>("Login");
+
+  //Effects
+  useEffect(() => {
+    if (searchedCity) {
+      fetchNearbyCoworkingSpaces(`coworking_spaces/nearby?location=${searchedCity}`)
+        .then(data => setSearchResults(Array.isArray(data) ? data : []))
+        .catch(error => console.error('Error fetching data:', error))
+    }
+  }, [searchedCity])
 
   return (
     <>
@@ -34,7 +45,7 @@ const [selectedAuth, setSelectedAuth] = useState<string>("Login");
       <Row id="mainContainer">
         <Col xs={4}>
           <h3>☆ Ratings</h3>
-          <Filter resultsLength={searchResults.length}/>
+          <Filter resultsLength={searchResults.length} searchResults={searchResults} setSearchResults={setSearchResults}/>
         </Col>
         <Col xs={5}>
         {/* If no data is set in searchResults state, "no Results" message is displayed to the user */}
@@ -52,7 +63,7 @@ const [selectedAuth, setSelectedAuth] = useState<string>("Login");
             </div>
             {/* Loop over the search results array, passing all the values from the current object to create a new ResultCard component for each object*/}
             <div className="searchResultsContainer">
-              {searchResults.map((location) => <ResultCard key={location.name} photo={location.photo} title={location.name} rating={location.rating} totalReviews={location.totalReviews} nearestStation={location.station} stationDistance={location.stationDistance}/>)}
+              {searchResults.length > 0 && searchResults.map((location) => <ResultCard key={location.name} photo={location.photo} title={location.name} rating={location.rating} totalReviews={location.totalReviews} nearestStation={location.station} stationDistance={location.stationDistance}/>)}
           </div>
           </>
           }

@@ -1,16 +1,51 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import "../styles/Filter.css";
 
-
 interface filterProps {
-  resultsLength: number 
+  resultsLength: number,
+  searchResults: coworkingResultsObject[],
+  setSearchResults: React.Dispatch<React.SetStateAction<coworkingResultsObject[]>>
 };
 
-const Filter: React.FC<filterProps> = ({ resultsLength }) => {
+interface coworkingResultsObject {
+  photo?: string,
+  name: string,
+  rating?: number,
+  totalReviews?: number,
+  station: string,
+  stationDistance: number
+}; 
+
+const Filter: React.FC<filterProps> = ({ resultsLength, searchResults, setSearchResults }) => {
 
   const [selectedFilter, setSelectedFilter] = useState<string>();
-  
+
+  useEffect(() => {
+    function sortSearchResultsByRating(order:string) {
+      const sorted = [...searchResults].sort((a, b) => {
+        const ratingA = a.rating || 0;
+        const ratingB = b.rating || 0;
+
+        // Sorting based on the 'order' parameter
+        if (order === 'desc') {
+          return ratingB - ratingA; 
+        } else if (order === 'asc') {
+          return ratingA - ratingB;
+        } 
+        return 0;
+      });
+      return sorted;
+    };
+
+    // Check the selected filter and apply sorting
+    if (selectedFilter === 'lowToHigh') {
+      setSearchResults(sortSearchResultsByRating('asc'));
+    } else if (selectedFilter === 'highToLow') {
+      setSearchResults(sortSearchResultsByRating('desc'));
+    }  
+  }, [selectedFilter])
+
   return (
     <div className="ratingsFilter w-50 p-3">
       <Form>
