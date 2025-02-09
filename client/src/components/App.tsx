@@ -11,6 +11,7 @@ import CoworkingSpaceDetails from './CoworkingSpaceDetails';
 import { TbMoodSad } from "react-icons/tb";
 import fetchNearbyCoworkingSpaces from '../api/coworkingSpaces';
 
+// Coworking Result Object Structure
 export interface coworkingResultsObject {
   photo?: string,
   name: string,

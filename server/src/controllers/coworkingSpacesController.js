@@ -75,6 +75,7 @@ async function getNearbyCoworkingSpaces (req, res) {
                 const totalReviews = await Reviews.getNumberOfRatingsByCoWorkingId(uuid);
 
                 return { ...coworkingSpace, nearestStationName, distanceToStation, averageRating, totalReviews, uuid };
+
             }
 
             // Return coworking space details without review data if no record found

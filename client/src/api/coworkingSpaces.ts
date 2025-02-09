@@ -27,7 +27,6 @@ async function fetchNearbyCoworkingSpaces (endpoint: string) : Promise<Array<cow
                 };
             })
         }
-
         // Return an empty array if no coworking spaces were found
         return [];
     } catch (error) {
