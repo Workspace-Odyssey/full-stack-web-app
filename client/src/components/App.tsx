@@ -9,10 +9,7 @@ import Filter from "./Filter";
 import ResultCard from './ResultCard';
 import { TbMoodSad } from "react-icons/tb";
 import fetchNearbyCoworkingSpaces from '../api/coworkingSpaces';
-
-
-
-// import LandingPage from './LandingPage';
+//import LandingPage from './LandingPage';
 
 
 // Coworking Result Object Structure
@@ -48,7 +45,7 @@ function App() {
     <Header setSearchedCity={setSearchedCity} setSelectedAuth={setSelectedAuth}/>
     <Container>
 
-      {/* <LandingPage/> */}
+      {/* <LandingPage setSearchedCity={setSearchedCity}/> */}
 
       {/* <Login_Register selectedAuth={selectedAuth}/> */}
 
