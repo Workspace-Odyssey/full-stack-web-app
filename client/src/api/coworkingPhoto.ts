@@ -1,10 +1,12 @@
 import axios from 'axios';
 
+// Create an Axios instance with base URL and timeout settings
 const instance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
     timeout: 3000,
 });
 
+// Function to fetch a photo by the Google Photo reference ID
 async function fetchPhotoByPhotoReference (endpoint: string) : Promise<string> {
     
     try {

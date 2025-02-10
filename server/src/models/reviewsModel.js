@@ -52,7 +52,7 @@ module.exports = {
                 rating: `${REVIEW_TABLE}.stars`,
                 datePosted: `${REVIEW_TABLE}.created_at`,
                 reviewText: `${REVIEW_TABLE}.content`,
-                username: 'u.username'
+                username: 'u.username',
             })
             .from(REVIEW_TABLE)
             .innerJoin('coworkings as c', function () {

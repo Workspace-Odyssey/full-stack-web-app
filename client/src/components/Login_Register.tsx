@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import "../styles/Login_SignUp.css";
+import "../styles/Login_Register.css";
 
 interface login_signupProps {
   selectedAuth: string;
