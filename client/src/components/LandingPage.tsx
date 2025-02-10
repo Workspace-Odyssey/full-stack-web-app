@@ -23,8 +23,9 @@ const LandingPage: React.FC<LandingProps> = ({setSearchedCity}) => {
                 <Form.Control
                   type="text"
                   placeholder="Search by city"
-                  className=" mr-sm-2"
+                  className="mr-sm-2"
                   style={{width: '32rem'}}
+                  // The same approach as in Header.tsx
                   onKeyDown={
                     (event: React.KeyboardEvent<HTMLInputElement>) => {
                       if (event.key === 'Enter') {
