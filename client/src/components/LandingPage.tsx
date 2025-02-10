@@ -7,9 +7,10 @@ import '../styles/LandingPage.css';
 
 type LandingProps = {
   setSearchedCity: React.Dispatch<React.SetStateAction<string>>
+  setCurrentView: React.Dispatch<React.SetStateAction<string>>
 }
 
-const LandingPage: React.FC<LandingProps> = ({setSearchedCity}) => {
+const LandingPage: React.FC<LandingProps> = ({setSearchedCity, setCurrentView }) => {
     return (<>
     <Card>
       <Card.Img variant="top" src="/src/assets/coworkingBackground.jpg" className="coworking"/>
@@ -31,6 +32,7 @@ const LandingPage: React.FC<LandingProps> = ({setSearchedCity}) => {
                       if (event.key === 'Enter') {
                         event.preventDefault();
                         setSearchedCity((event.target as HTMLInputElement).value)
+                        setCurrentView('resultsPage');
                       }
                     }
                   }

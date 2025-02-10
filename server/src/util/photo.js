@@ -10,8 +10,8 @@ async function getPhoto(photoReference) {
         params: { 
           key: apiKey,
           photo_reference: photoReference,
-          maxheight: 1600,
-          maxwidth: 1600,
+          maxheight: 800,
+          maxwidth: 1200,
         },
         responseType: 'arraybuffer', //data is returned in binary form
       });

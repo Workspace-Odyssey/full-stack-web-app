@@ -8,6 +8,7 @@ import { FaStar } from "react-icons/fa";
 import Image from 'react-bootstrap/Image';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 import "../styles/CoworkingSpaceDetails.css";
 import Review from './Review';
 
@@ -45,7 +46,7 @@ const CoworkingSpaceDetails:React.FC<coworkingSpaceDetailsProps> = ({ currentCow
   });
 
   return (
-    <>
+    <Container>
         { currentCoworkingSpace && (
             <div>
                 {/* Allows for easy navigation back to the search results */}
@@ -127,7 +128,7 @@ const CoworkingSpaceDetails:React.FC<coworkingSpaceDetailsProps> = ({ currentCow
                 )}
             </div>
         )}
-    </>
+    </Container>
   )
 }
 

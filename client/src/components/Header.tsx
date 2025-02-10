@@ -18,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ setSearchedCity, setSelectedAuth, setCu
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
         {/* Logo + App Name */}
-        <Navbar.Brand href="#home">
+        <Navbar.Brand href="#home" onClick={() => setCurrentView('landingPage')}>
           <img
             alt=""
             src=""
