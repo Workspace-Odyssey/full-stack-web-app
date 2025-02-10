@@ -24,3 +24,14 @@ export async function fetchReviewsByCoworkingSpaceId (endpoint: string) : Promis
         throw error;
     }
 }
+
+// Function to submit a review for a specified coworking space
+export async function submitReview (endpoint: string, review: reviewsObject) : Promise<any> {
+    try {
+        const response = await instance.post(endpoint, review);
+        return response.data;
+    } catch (error) {
+        console.error('Error submitting review: ', error);
+        throw error;
+    }
+}
