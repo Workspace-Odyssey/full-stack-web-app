@@ -1,21 +1,13 @@
 import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import "../styles/Filter.css";
+import { coworkingResultsObject } from './App'
 
 interface filterProps {
   resultsLength: number,
   searchResults: coworkingResultsObject[],
   setSearchResults: React.Dispatch<React.SetStateAction<coworkingResultsObject[]>>
 };
-
-interface coworkingResultsObject {
-  photo?: string,
-  name: string,
-  rating?: number,
-  totalReviews?: number,
-  station: string,
-  stationDistance: number
-}; 
 
 const Filter: React.FC<filterProps> = ({ resultsLength, searchResults, setSearchResults }) => {
 

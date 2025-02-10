@@ -8,28 +8,37 @@ import { FaStar } from "react-icons/fa";
 import { FaTrain } from "react-icons/fa";
 import fetchPhotoByPhotoReference from '../api/coworkingPhoto';
 import { AxiosError } from 'axios';
+import { coworkingResultsObject } from './App'
 
 interface ResultCardProps {
   photo?: string,
-  title: string,
+  name: string,
   rating?: number,
   totalReviews?: number,
   nearestStation: string,
-  stationDistance: number
+  stationDistance: number,
+  id?: string,
+  address: string,
+  setCurrentView: React.Dispatch<React.SetStateAction<string>>,
+  setCurrentCoworkingSpace: React.Dispatch<React.SetStateAction<coworkingResultsObject|undefined>>,
 };
 
-interface starIconColor {
+export interface starIconColor {
   orange: string;
   grey: string;
 }
 
 const ResultCard: React.FC<ResultCardProps> = ({
   photo,
-  title,
+  name,
   rating,
   totalReviews,
   nearestStation,
   stationDistance,
+  id,
+  address,
+  setCurrentView,
+  setCurrentCoworkingSpace,
 }) => {
   
   // Array needed to loop through for correct stars amount.
@@ -63,7 +72,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
         <Col>
         {/* Card Body for all content */}
           <Card.Body>
-            <Card.Title>{title}</Card.Title>
+            <Card.Title>{name}</Card.Title>
             <div className="cardContent">
               {/* Correctly display and shade the star icon based on the rating passed in */}
               {stars.map((_, index) => (
@@ -88,7 +97,22 @@ const ResultCard: React.FC<ResultCardProps> = ({
               </Card.Text>
             </div>
           </Card.Body>
-          <Button className="cardViewBtn primaryColor">View</Button>
+          <Button className="cardViewBtn primaryColor"
+                  onClick={() => {
+                    setCurrentView('detailsPage');
+                    setCurrentCoworkingSpace({
+                      photo: photoUrl,
+                      name,
+                      rating,
+                      totalReviews,
+                      nearestStation,
+                      stationDistance,
+                      id,
+                      address,
+                    })
+                  }
+                  }
+          >View</Button>
         </Col>
       </Row>
     </Card>
