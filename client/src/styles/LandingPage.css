@@ -1,0 +1,64 @@
+/* Make sure to reset margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Styling for the card image */
+  .coworking {
+    object-fit: cover;
+    height: 94vh; /* Full screen height */
+    width: 100%;
+  }
+  
+  /* Overlay container styling */
+  .allItems {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* This will center the content */
+    text-align: center;
+    color: white;
+    padding: 20px;
+    z-index: 1;
+  }
+
+  .card-img-overlay{
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 0;
+  }
+  
+  /* Styling for the main heading */
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Shadow to enhance readability */
+  }
+  
+  /* Styling for the subheading */
+  h3 {
+    font-size: 1.5rem;
+    margin-top: 20px;
+    font-weight: normal;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+  }
+  
+  /* Card input styling */
+  input {
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 400px; /* Max width for better responsiveness */
+    border-radius: 8px;
+    border: none;
+    outline: none;
+  }
+  
+  /* Optional: Add focus effect on input */
+  input:focus {
+    border: 2px solid #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
