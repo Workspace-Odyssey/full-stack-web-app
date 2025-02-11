@@ -23,6 +23,18 @@ if (!isProduction) {
 	}));
 }
 
+app.use(session({
+	secret: process.env.EXPSECRET,
+	resave: false,
+	saveUninitialized: false,
+	cookie: {
+		secure: process.env.NODE_ENV === 'production',
+		httpOnly: true,
+		maxAge: 1000 * 60 * 60 * 24, // Set the cookie expiration to 1 day
+		sameSite: 'lax',
+	}
+}));
+
 // Serve static files in production
 if (isProduction) {
 	// Serve static files from the 'dist' directory
@@ -31,25 +43,13 @@ if (isProduction) {
 	app.use('/user', authRoutes);
 	app.use('/reviews', reviewsRoutes);
 	app.use('/coworking_spaces', coworkingSpacesRoutes);
-	
+
   	app.get('*', (req, res) => {
 	  res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'));
 	});
   }
 
-
-app.use(session({
-	secret: process.env.EXPSECRET,
-	resave: false,
-	saveUninitialized: false,
-	cookie: {
-		secure: process.env.NODE_ENV === 'production',
-		httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24, // Set the cookie expiration to 1 day
-		sameSite: 'lax',
-	}
-}));
-
+// API routes
 app.use('/user', authRoutes);
 app.use('/reviews', reviewsRoutes);
 app.use('/coworking_spaces', coworkingSpacesRoutes);
