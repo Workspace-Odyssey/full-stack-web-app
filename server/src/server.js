@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const MemoryStore = require('memorystore')(session);
 const cors = require("cors");
 const knex = require('./knex');
 const coworkingSpacesRoutes = require('./routes/coworkingSpaceRoutes');
@@ -32,7 +33,10 @@ app.use(session({
 		httpOnly: true,
 		maxAge: 1000 * 60 * 60 * 24, // Set the cookie expiration to 1 day
 		sameSite: 'lax',
-	}
+	},
+	store: new MemoryStore({
+		checkPeriod: 86400000 // prune expired entries every 24h
+	}),
 }));
 
 // Serve static files in production
