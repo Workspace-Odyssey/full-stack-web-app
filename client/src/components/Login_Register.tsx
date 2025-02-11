@@ -25,7 +25,6 @@ const Login_SignUp: React.FC<login_signupProps> = ({ selectedAuth, setUser, prev
   const [usernameError, setUsernameError] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<boolean>(false); 
   const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Handles form input validation on form submit
   const handleAuthSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -68,7 +67,6 @@ const Login_SignUp: React.FC<login_signupProps> = ({ selectedAuth, setUser, prev
             password: passwordInput,
           }, { withCredentials: true });
 
-          console.log('Response from backend:', response);
           alert(response.data.message);
         } else if (selectedAuth === 'Login') {
           // Send either the username or email based on the user input
@@ -95,7 +93,7 @@ const Login_SignUp: React.FC<login_signupProps> = ({ selectedAuth, setUser, prev
       } catch (error: any) {
         setLoading(false);
         console.error('Error during request:', error);
-        setErrorMessage(error.response?.data?.message || 'Something went wrong');
+        alert(error.response?.data?.message || 'Something went wrong');
       }
     }
   };
