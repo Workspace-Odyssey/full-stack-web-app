@@ -46,7 +46,7 @@ if (isProduction) {
       methods: ['GET', 'POST'],
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true,
-}));
+	}));
 
 	// Serve static files from the 'dist' directory
 	app.use(express.static(path.join(__dirname, '../../client/dist')));
@@ -58,7 +58,7 @@ if (isProduction) {
   	app.get('*', (req, res) => {
 	  res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'));
 	});
-  }
+}
 
 // API routes
 app.use('/user', authRoutes);
