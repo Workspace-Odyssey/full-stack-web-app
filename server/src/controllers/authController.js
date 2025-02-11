@@ -8,7 +8,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // Check if all required fields are provided
     if(!username || !email || !password) {
-        console.log('Missing fields in registration request');
         res.status(400);
         throw new Error('Fill out all the fields');
     }
@@ -16,7 +15,6 @@ const registerUser = asyncHandler(async (req, res) => {
     // Check if user already exists
     const userExist = await User.findOne({ email });
         if(userExist) {
-            console.log('User already exists:', email);
             res.status(400);
             throw new Error('User already exists');
         }
@@ -31,17 +29,15 @@ const registerUser = asyncHandler(async (req, res) => {
     }, ["username", "email", "password"])
 
     if(newUser) {
-        console.log('New user created:', newUser);
 
         // Store user session data
-        req.session.userId = newUser.id;
+        req.session.userId = newUser.uuid;
         req.session.username = newUser.username;
 
         res.status(201).json({
             message: 'User registered successfully'
         });
     } else {  
-        console.log('Failed to create user');
         res.status(400);
         throw new Error('Invalid user data')
     }
@@ -54,7 +50,6 @@ const loginUser = asyncHandler(async (req, res) => {
 
     // Check if credentials are provided
     if(!usernameEmail || !password) {
-        console.log('Missing credentials in login request');
         res.status(400);
         throw new Error('Please provide email and password')
     }
@@ -70,7 +65,6 @@ const loginUser = asyncHandler(async (req, res) => {
     }
   
     if (!user) {
-      console.log('Invalid credentials, user not found');
       res.status(400);
       throw new Error('Invalid credentials');
     }
@@ -78,7 +72,6 @@ const loginUser = asyncHandler(async (req, res) => {
     // compare the entered password with the stored hashed password
     const isPasswordCorrect = await comparePassword(password, user.password);
     if(!isPasswordCorrect) {
-        console.log('Invalid credentials, password incorrect');
         res.status(400);
         throw new Error('Invalid credentials');
     }
