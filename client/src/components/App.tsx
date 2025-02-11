@@ -8,7 +8,7 @@ import Login_Register from "./Login_Register";
 import Filter from "./Filter";
 import ResultCard from './ResultCard';
 import CoworkingSpaceDetails from './CoworkingSpaceDetails';
-import { FaSadTear } from "react-icons/fa";
+import { TbMoodSad } from "react-icons/tb";
 import fetchNearbyCoworkingSpaces from '../api/coworkingSpaces';
 import LandingPage from './LandingPage';
 import Spinner from 'react-bootstrap/Spinner'; 
@@ -111,7 +111,7 @@ function App() {
                   </div>
                 ) : searchResults.length < 1 ? ( // If no results, show "No Results Found" message
                   <div id="noResults">
-                    <FaSadTear size={100}/>
+                    <TbMoodSad size={100}/>
                     <h3>No Results Found</h3>
                   </div> 
                 ) : ( // If results are available, display them
