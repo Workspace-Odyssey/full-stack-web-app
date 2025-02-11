@@ -10,7 +10,12 @@ const PORT = process.env.PORT;
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+	// origin: '',
+	// methods: ['GET', 'POST'],
+	// allowedHeaders: ['Content-Type', 'Authorization'], // content-type: for sending JSON and form data. // authorization:  used for passing authentication credentials
+	// credentials: true,
+}));
 
 app.use(session({
 	secret: process.env.EXPSECRET,
