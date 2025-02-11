@@ -63,7 +63,7 @@ const Login_SignUp: React.FC<login_signupProps> = ({ selectedAuth }) => {
 
         if (selectedAuth === 'Register') {
           // Register request - send both username and email
-          response = await axios.post('http://localhost:3030/user/register', {
+          response = await axios.post(`${import.meta.env.VITE_BASE_URL}user/register`, {
             username: usernameInput, // Send the username field
             email: emailInput, // Send the email field
             password: passwordInput,
@@ -74,7 +74,7 @@ const Login_SignUp: React.FC<login_signupProps> = ({ selectedAuth }) => {
         } else if (selectedAuth === 'Login') {
           // Send either the username or email based on the user input
           const usernameOrEmail = usernameInput || emailInput;
-          response = await axios.post('http://localhost:3030/user/login', {
+          response = await axios.post(`${import.meta.env.VITE_BASE_URL}user/login`, {
             usernameEmail: usernameOrEmail, // Send whichever input is filled
             password: passwordInput,
           })
