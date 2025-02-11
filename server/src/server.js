@@ -10,10 +10,27 @@ const PORT = process.env.PORT;
 const app = express();
 
 app.use(express.json());
-app.use(cors({
-	origin: 'http://localhost:5173',
-	credentials: true, // Allow cookies to be sent with requests
-}));
+
+// Get the environment variable to check if it's development or production
+const isProduction = process.env.NODE_ENV === 'production';
+
+// CORS configuration for development
+if (!isProduction) {
+	app.use(cors({
+		origin: 'http://localhost:5173',
+		credentials: true, // Allow cookies to be sent with requests
+	}));
+}
+
+// Serve static files in production
+if (isProduction) {
+	// Serve static files from the 'dist' directory
+	app.use(express.static(path.join(__dirname, '../../client/dist')));
+  	app.get('*', (req, res) => {
+	  res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'));
+	});
+  }
+
 
 app.use(session({
 	secret: process.env.EXPSECRET,
