@@ -31,7 +31,6 @@ export async function submitReview (endpoint: string, review: reviewsObject) : P
     
     try {
         const response = await instance.post(endpoint, review);
-        console.log('Session data:', response.data);
         return response.data;
     } catch (error) {
         console.error('Error submitting review: ', error);
