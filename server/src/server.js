@@ -5,6 +5,7 @@ const knex = require('./knex');
 const coworkingSpacesRoutes = require('./routes/coworkingSpaceRoutes');
 const authRoutes = require('./routes/authRoutes')
 const reviewsRoutes = require('./routes/reviewRoutes');
+const path = require("path");
 
 const PORT = process.env.PORT;
 const app = express();
