@@ -16,6 +16,8 @@ async function nearbySearch(coordinates, keyword) {
 
     const results = response.data.results
 
+    console.log(results)
+
     if (response.data.status === 'OK' && results.length) {
       const places = results.map(place => {
 
