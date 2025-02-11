@@ -3,7 +3,7 @@ import axios from 'axios';
 // Create an Axios instance with base URL and timeout settings
 const instance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
-    timeout: 3000,
+    timeout: 5000,
     withCredentials: true,
 });
 
