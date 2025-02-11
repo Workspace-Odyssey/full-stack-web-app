@@ -106,7 +106,7 @@ const CoworkingSpaceDetails:React.FC<coworkingSpaceDetailsProps> = ({ currentCow
 
                         {/* Render button to allow the user to post a review */}
                         <p className='post-review'>Are you a member?</p>
-                        <Button className="primaryOutline" onClick={() => {
+                        <Button className="primaryOutline post-review-button" onClick={() => {
                             console.log(user)
                             if (user) {
                                 setIsReviewsPage(true); // Show reviews page if user is logged in
