@@ -50,21 +50,13 @@ async function getNearbyCoworkingSpaces (req, res) {
         const locationCoordinates = await getGeocodingData(location);
 
         // Get nearby coworking spaces based on location coordinates
-		const listOfCoworkingSpaces = await nearbySearch(locationCoordinates, 'coworking space');
+		const listOfCoworkingSpaces = await nearbySearch(locationCoordinates, { keyword: 'coworking space' });
         
         // Create an array of promises for fetching additional data for each coworking space
         const coworkingSpacesWithDetails = await Promise.all(listOfCoworkingSpaces.map(async (coworkingSpace) => {
 
-            const nearbyStationsTrain = await nearbySearch(coworkingSpace.coordinates, "train_station");
-
-            const nearbyStationsSubway = await nearbySearch(coworkingSpace.coordinates, "subway_station");
-
-            const nearbyStations = [...nearbyStationsTrain, ...nearbyStationsSubway];
-            
-            // Sort the stations by distance
-            nearbyStations.sort((stationA, stationB) => stationA.distance - stationB.distance);
-
             // Get the nearest station
+            const nearbyStations = await nearbySearch(coworkingSpace.coordinates, { type: 'transit_station', keyword: 'metro' });
             const nearestStation = nearbyStations.length > 0 ? nearbyStations[0] : "No station found";
 
             const nearestStationCoordinates = nearestStation.coordinates;
