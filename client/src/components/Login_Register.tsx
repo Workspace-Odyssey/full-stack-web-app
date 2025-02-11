@@ -7,9 +7,13 @@ import "../styles/Login_Register.css";
 
 interface login_signupProps {
   selectedAuth: string;
+  setUser: React.Dispatch<React.SetStateAction<string | null>>;
+  previousView: string,
+  setCurrentView: React.Dispatch<React.SetStateAction<string>>
+  setPreviousView: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Login_SignUp: React.FC<login_signupProps> = ({ selectedAuth }) => {
+const Login_SignUp: React.FC<login_signupProps> = ({ selectedAuth, setUser, previousView, setCurrentView, setPreviousView }) => {
 
   const [validatedInput, setValidatedInput] = useState<boolean>(false);
   const [usernameInput, setUsernameInput] = useState<string>(""); // Separate state for username
@@ -25,6 +29,7 @@ const Login_SignUp: React.FC<login_signupProps> = ({ selectedAuth }) => {
 
   // Handles form input validation on form submit
   const handleAuthSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const inputForm = event.currentTarget;
 
     // Checks all inputs if the inputs are not empty
@@ -55,19 +60,13 @@ const Login_SignUp: React.FC<login_signupProps> = ({ selectedAuth }) => {
       try {
         let response;
 
-        console.log('Sending data to backend:', {
-          username: usernameInput,
-          email: emailInput,
-          password: passwordInput
-        })
-
         if (selectedAuth === 'Register') {
           // Register request - send both username and email
           response = await axios.post(`${import.meta.env.VITE_BASE_URL}user/register`, {
             username: usernameInput, // Send the username field
             email: emailInput, // Send the email field
             password: passwordInput,
-          });
+          }, { withCredentials: true });
 
           console.log('Response from backend:', response);
           alert(response.data.message);
@@ -77,8 +76,20 @@ const Login_SignUp: React.FC<login_signupProps> = ({ selectedAuth }) => {
           response = await axios.post(`${import.meta.env.VITE_BASE_URL}user/login`, {
             usernameEmail: usernameOrEmail, // Send whichever input is filled
             password: passwordInput,
-          })
+          }, { withCredentials: true })
+
           alert(response.data.message);
+
+          // If login is successful, set the username
+          if (response.data.user) {
+            localStorage.setItem("username", response.data.user.username);
+            localStorage.setItem("uuid", response.data.user.uuid);
+            setUser(response.data.user.username);
+          }
+
+          // Return to the previous view or default to landing page
+          setPreviousView('loginPage');
+          setCurrentView(previousView || 'landingPage');
         }
         setLoading(false);
       } catch (error: any) {

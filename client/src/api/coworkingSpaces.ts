@@ -5,6 +5,7 @@ import { coworkingResultsObject } from '../components/App'
 const instance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
     timeout: 3000,
+    withCredentials: true,
 });
 
 async function fetchNearbyCoworkingSpaces (endpoint: string) : Promise<Array<coworkingResultsObject>> {

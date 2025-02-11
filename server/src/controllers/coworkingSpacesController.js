@@ -6,23 +6,24 @@ const asyncHandler = require("express-async-handler");
 const Coworking = require('../models/coworkingModels');
 const Reviews = require('../models/reviewsModel');
 
-
+// Register a new coworking space
 const registerCoworkingSpace = asyncHandler(async (req, res) => {
     const coworkingSpace = req.body;
 
+    // Ensure required fields are provided
     if(!coworkingSpace.name || !coworkingSpace.location) {
         res.status(400);
         throw new Error('Fill out all the fields');
     }
 
-    // Check if coworking exist
+    // Check if coworking space already exists
     const coworkingExist = await Coworking.findOne(coworkingSpace.name);
     if (coworkingExist) {
         res.status(400);
         throw new Error('Coworking already exists');
     }
 
-    // Create new coworking profile
+    // Create new coworking space in the database
     const newCoworking = await Coworking.create(coworkingSpace);
 
     if (newCoworking) {
@@ -35,6 +36,7 @@ const registerCoworkingSpace = asyncHandler(async (req, res) => {
     }
 })
 
+// Function to get nearby coworking spaces based on location
 async function getNearbyCoworkingSpaces (req, res) {
     const { location } = req.query;
     
@@ -54,7 +56,7 @@ async function getNearbyCoworkingSpaces (req, res) {
         const coworkingSpacesWithDetails = await listOfCoworkingSpaces.map(async (coworkingSpace) => {
             // Get nearby transit stations for the coworking space
             const nearbyStations = await nearbySearch(coworkingSpace.coordinates, 'train_station|subway_station');
-            const nearestStation = nearbyStations[0];
+            const nearestStation = nearbyStations.length > 0 ? nearbyStations[0] : "No station found";
 
             // Extract the station's details
             const nearestStationCoordinates = nearestStation.coordinates;
@@ -90,6 +92,7 @@ async function getNearbyCoworkingSpaces (req, res) {
 	}
 }
 
+// Function to get a photo for a coworking space using its photo reference
 async function getPhotoOfCoworkingSpace (req, res) {
     const { photo_reference } = req.query;
     

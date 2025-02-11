@@ -2,17 +2,18 @@ const { hashPassword, comparePassword } = require('../../src/util/passwordUtils'
 const User = require('../models/userModels');
 const asyncHandler = require("express-async-handler");
 
-// Register
+// Register a new user
 const registerUser = asyncHandler(async (req, res) => {
     const { username, email, password} = req.body
 
+    // Check if all required fields are provided
     if(!username || !email || !password) {
         console.log('Missing fields in registration request');
         res.status(400);
         throw new Error('Fill out all the fields');
     }
 
-    // Check if user exist
+    // Check if user already exists
     const userExist = await User.findOne({ email });
         if(userExist) {
             console.log('User already exists:', email);
@@ -22,7 +23,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const hashedPassword = await hashPassword(password);
 
-    // Create user
+    // Create a new user
     const [newUser] = await User.create({
         username,
         email,
@@ -31,6 +32,8 @@ const registerUser = asyncHandler(async (req, res) => {
 
     if(newUser) {
         console.log('New user created:', newUser);
+
+        // Store user session data
         req.session.userId = newUser.id;
         req.session.username = newUser.username;
 
@@ -44,11 +47,12 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 })
 
+// Login user
 const loginUser = asyncHandler(async (req, res) => {
-    console.log('Login request received:', req.body);
 
     const { usernameEmail, password } = req.body;
 
+    // Check if credentials are provided
     if(!usernameEmail || !password) {
         console.log('Missing credentials in login request');
         res.status(400);
@@ -58,12 +62,10 @@ const loginUser = asyncHandler(async (req, res) => {
     let user;
     // Check if it's an email or username
     if (usernameEmail.includes('@')) {
-        console.log('Login attempt with email:', usernameEmail);
-      // It's an email, so search by email
+      // Search user by email
       user = await User.findOne({ email: usernameEmail });
     } else {
-        console.log('Login attempt with username:', usernameEmail);
-      // It's a username, so search by username
+      // Search user by username
       user = await User.findOne({ username: usernameEmail });
     }
   
@@ -73,7 +75,7 @@ const loginUser = asyncHandler(async (req, res) => {
       throw new Error('Invalid credentials');
     }
 
-    // compare the entered pw with the stored hashed password
+    // compare the entered password with the stored hashed password
     const isPasswordCorrect = await comparePassword(password, user.password);
     if(!isPasswordCorrect) {
         console.log('Invalid credentials, password incorrect');
@@ -81,15 +83,22 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new Error('Invalid credentials');
     }
 
-    req.session.userId = user.id;
+    // Store user session data
+    req.session.userId = user.uuid;
     req.session.username = user.username;
 
-    console.log('Login successful:', user);
-    res.status(200).json({ message: 'Login successful'})
+    res.status(200).json({ 
+        message: 'Login successful', 
+        user: {
+            username: req.session.username,
+            uuid: req.session.userId,
+        }
+    })
 })
 
+// Logout user by clearing session data
 const logoutUser = (req, res) => {
-    // To clear the session data
+    // Destroy the session data
     req.session.destroy((err) => {
         if(err) {;
             return res.status(500).json({error: 'Logout failed'});

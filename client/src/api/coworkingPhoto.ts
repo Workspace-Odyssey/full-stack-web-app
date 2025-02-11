@@ -4,6 +4,7 @@ import axios from 'axios';
 const instance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
     timeout: 3000,
+    withCredentials: true,
 });
 
 // Function to fetch a photo by the Google Photo reference ID

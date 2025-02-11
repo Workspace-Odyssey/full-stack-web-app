@@ -1,5 +1,6 @@
 const Reviews = require('../models/reviewsModel');
 
+// Function to get all reviews for a specific coworking space
 async function getAllReviewsByCoWorkingSpace (req, res) {
     try {
         const { coworking_space_id } = req.params;
@@ -10,18 +11,20 @@ async function getAllReviewsByCoWorkingSpace (req, res) {
     }
 }
 
+// Function to submit a review for a coworking space
 async function submitReview (req, res) {
 
     // Check if the user is logged in
-    if (!req.session.user || !req.session.user.id) {
+    if (!req.session.userId || !req.session.username) {
         return res.status(401).send("You must be logged in to submit a review.");
     }
     
     try {
-        const user_id = req.session.user.id; // Retrieve the UUID from the session
+        const user_id = req.session.userId; // Retrieve the UUID from the session
         const { coworking_id } = req.params;
         const { reviewText, rating, datePosted } = req.body;
         
+        // Submit the review data to the database
         await Reviews.submit({ 
             'created_at': datePosted,
             'content': reviewText,

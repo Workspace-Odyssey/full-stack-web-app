@@ -1,3 +1,7 @@
 .btn:first-child:active {
     background-color: var(--global-color-primary);
 }
+
+span {
+    margin-right: 10px;
+}

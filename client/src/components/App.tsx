@@ -11,6 +11,7 @@ import CoworkingSpaceDetails from './CoworkingSpaceDetails';
 import { TbMoodSad } from "react-icons/tb";
 import fetchNearbyCoworkingSpaces from '../api/coworkingSpaces';
 import LandingPage from './LandingPage';
+import Spinner from 'react-bootstrap/Spinner'; 
 
 
 // Coworking Result Object Structure
@@ -27,34 +28,74 @@ export interface coworkingResultsObject {
 
 function App() {
 
-  //States
+  //States variables
   const [searchedCity, setSearchedCity] = useState<string>("");
   const [searchResults, setSearchResults] = useState<coworkingResultsObject[]>([]);
   const [selectedAuth, setSelectedAuth] = useState<string>("Login");
   const [currentView, setCurrentView] = useState<string>('landingPage');
+  const [previousView, setPreviousView] = useState<string>('');
   const [currentCoworkingSpace, setCurrentCoworkingSpace] = useState<coworkingResultsObject|undefined>(undefined)
+  const [user, setUser] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  //Effects
+  // Effect to fetch coworking spaces when searched city is updated
   useEffect(() => {
     if (searchedCity) {
+      setLoading(true);
       fetchNearbyCoworkingSpaces(`coworking_spaces/nearby?location=${searchedCity}`)
-        .then(data => setSearchResults(Array.isArray(data) ? data : []))
-        .catch(error => console.error('Error fetching data:', error))
+        .then(data => {
+          setSearchResults(Array.isArray(data) ? data : []);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          setLoading(false); 
+        })
     }
   }, [searchedCity])
 
+  // Effect to load user from local storage
+  useEffect(() => {
+    const storedUser = localStorage.getItem('username');
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, [setUser]);
+
   return (
     <>
-    {/* Search Bar values are set in state from setSearchCity function */}
-    <Header setSearchedCity={setSearchedCity} setSelectedAuth={setSelectedAuth} setCurrentView={setCurrentView}/>
+    {/* Header component that holds the search bar and authentication button */}
+    <Header 
+      setSearchedCity={setSearchedCity} 
+      setSelectedAuth={setSelectedAuth} 
+      setCurrentView={setCurrentView} 
+      user={user} 
+      setUser={setUser}
+      setPreviousView={setPreviousView}
+      currentView={currentView}
+    />
+      
       { 
-        // Check if the current view is 'landingPage'
+        // Conditional rendering based on current view state:
         currentView === 'landingPage' ? <LandingPage setSearchedCity={setSearchedCity} setCurrentView={setCurrentView}/> :
-        // If the current view is 'detailsPage'
-        currentView === 'detailsPage' ? <CoworkingSpaceDetails currentCoworkingSpace={currentCoworkingSpace} searchedCity={searchedCity} setCurrentView={setCurrentView}/> : 
-        // If the current view is 'loginPage'
-        currentView === 'loginPage' ? <Login_Register selectedAuth={selectedAuth}/> : 
-        // If the current view is 'resultsPage'
+        
+        currentView === 'detailsPage' ? <CoworkingSpaceDetails 
+          currentCoworkingSpace={currentCoworkingSpace} 
+          searchedCity={searchedCity} 
+          setCurrentView={setCurrentView} 
+          setPreviousView={setPreviousView} 
+          user={user} 
+          previousView={previousView} 
+          setCurrentCoworkingSpace={setCurrentCoworkingSpace}/> : 
+        
+        currentView === 'loginPage' ? <Login_Register 
+          selectedAuth={selectedAuth} 
+          setUser={setUser} 
+          previousView={previousView} 
+          setCurrentView={setCurrentView} 
+          setPreviousView={setPreviousView}/> : 
+
+        // Main results page when current view is not 'landingPage', 'detailsPage', or 'loginPage'
         (
           <Container>
             <Row id="mainContainer">
@@ -63,38 +104,42 @@ function App() {
                 <Filter resultsLength={searchResults.length} searchResults={searchResults} setSearchResults={setSearchResults}/>
               </Col>
               <Col xs={7}>
-              {/* If no data is set in searchResults state, "no Results" message is displayed to the user */}
-              {searchResults.length < 1 ? 
-                <div id="noResults">
-                  <TbMoodSad size={100}/>
-                  <h3>No Results Found</h3>
-                </div> :
-                <>
-                  {/* If data has been set in the search results state, display the data in a card to the user */}
-                  <h3>Coworking Spaces in {searchedCity}</h3>
-                  <div className="resultsHeader">
-                    <i className="bi bi-geo-alt-fill"></i>
-                    <p>{searchResults.length} Results</p>
+                {loading ? (  // Show loading spinner if data is being fetched
+                  <div id="loadingContainer">
+                    <Spinner animation="border" variant="primary" />
+                    <p>Loading...</p>
                   </div>
-                  {/* Loop over the search results array, passing all the values from the current object to create a new ResultCard component for each object*/}
-                  <div className="searchResultsContainer">
-                    {searchResults.length > 0 && searchResults.map((location) => {
-                      return <ResultCard 
-                        key={location.name} 
-                        photo={location.photo} 
-                        name={location.name} 
-                        rating={location.rating} 
-                        totalReviews={location.totalReviews} 
-                        nearestStation={location.nearestStation} 
-                        stationDistance={location.stationDistance}
-                        id={location.id} 
-                        address={location.address}
-                        setCurrentView={setCurrentView} 
-                        setCurrentCoworkingSpace={setCurrentCoworkingSpace}/>
-                    })}
-                </div>
-                </>
-                }
+                ) : searchResults.length < 1 ? ( // If no results, show "No Results Found" message
+                  <div id="noResults">
+                    <TbMoodSad size={100}/>
+                    <h3>No Results Found</h3>
+                  </div> 
+                ) : ( // If results are available, display them
+                  <>
+                    <h3>Coworking Spaces in {searchedCity}</h3>
+                    <div className="resultsHeader">
+                      <i className="bi bi-geo-alt-fill"></i>
+                      <p>{searchResults.length} Results</p>
+                    </div>
+                    {/* Loop over the search results array, passing all the values from the current object to create a new ResultCard component for each object*/}
+                    <div className="searchResultsContainer">
+                      {searchResults.length > 0 && searchResults.map((location) => {
+                        return <ResultCard 
+                          key={location.name} 
+                          photo={location.photo} 
+                          name={location.name} 
+                          rating={location.rating} 
+                          totalReviews={location.totalReviews} 
+                          nearestStation={location.nearestStation} 
+                          stationDistance={location.stationDistance}
+                          id={location.id} 
+                          address={location.address}
+                          setCurrentView={setCurrentView} 
+                          setCurrentCoworkingSpace={setCurrentCoworkingSpace}/>
+                      })}
+                    </div>
+                  </>
+                )}
               </Col>
             </Row>
           </Container>

@@ -4,6 +4,7 @@ import axios from 'axios';
 const instance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
     timeout: 1000,
+    withCredentials: true,
 });
 
 // Interface to define the structure of a review object
@@ -27,8 +28,10 @@ export async function fetchReviewsByCoworkingSpaceId (endpoint: string) : Promis
 
 // Function to submit a review for a specified coworking space
 export async function submitReview (endpoint: string, review: reviewsObject) : Promise<any> {
+    
     try {
         const response = await instance.post(endpoint, review);
+        console.log('Session data:', response.data);
         return response.data;
     } catch (error) {
         console.error('Error submitting review: ', error);

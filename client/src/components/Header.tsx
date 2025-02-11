@@ -11,9 +11,20 @@ type HeaderProps = {
   setSearchedCity: React.Dispatch<React.SetStateAction<string>>
   setSelectedAuth: React.Dispatch<React.SetStateAction<string>>
   setCurrentView: React.Dispatch<React.SetStateAction<string>>
+  user: string | null;
+  setUser: React.Dispatch<React.SetStateAction<string | null>>;
+  setPreviousView: React.Dispatch<React.SetStateAction<string>>
+  currentView: string;
 };
 
-const Header: React.FC<HeaderProps> = ({ setSearchedCity, setSelectedAuth, setCurrentView }) => {
+const Header: React.FC<HeaderProps> = ({ setSearchedCity, setSelectedAuth, setCurrentView, user, setUser, setPreviousView, currentView }) => {
+
+  // Handles user logout by clearing localStorage and resetting user state
+  const handleLogout = () => {
+    localStorage.removeItem("username");
+    setUser(''); 
+  };
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -49,19 +60,39 @@ const Header: React.FC<HeaderProps> = ({ setSearchedCity, setSelectedAuth, setCu
             </Col>
           </Row>
         </Form>
-        {/* Auth Buttons */}
+
+        {/* Auth Buttons or User Greeting */}
         <Row>
           <Col xs="auto">
+          {user ? (
+            // Display username and a Logout button if logged in
+            <> 
+              <span>Hi, {user}</span>
+              <Button
+                className="primaryColor"
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            // Show Login button if not logged in
             <Button id="Login" className="primaryColor" onClick={(event) => {
               setSelectedAuth(event.currentTarget.id);
+              setPreviousView(currentView);
               setCurrentView('loginPage');
             }}>Login</Button>
+          )}
           </Col>
           <Col>
-            <Button id="Register" className="primaryOutline" onClick={(event) => {
-              setSelectedAuth(event.currentTarget.id);
-              setCurrentView('loginPage');
-            }}>Register</Button>
+            {!user && (
+              // Show Register button if user is not logged in
+              <Button id="Register" className="primaryOutline" onClick={(event) => {
+                setSelectedAuth(event.currentTarget.id);
+                setPreviousView(currentView);
+                setCurrentView('loginPage');
+              }}>Register</Button>
+            )}
           </Col>
         </Row>
       </Container>

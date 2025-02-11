@@ -16,21 +16,32 @@ interface coworkingSpaceDetailsProps {
     currentCoworkingSpace: coworkingResultsObject|undefined,
     searchedCity: string,
     setCurrentView: React.Dispatch<React.SetStateAction<string>>
+    setPreviousView: React.Dispatch<React.SetStateAction<string>>
+    user: string|null,
+    previousView: string,
+    setCurrentCoworkingSpace: React.Dispatch<React.SetStateAction<coworkingResultsObject|undefined>>,
 };
 
-const CoworkingSpaceDetails:React.FC<coworkingSpaceDetailsProps> = ({ currentCoworkingSpace, searchedCity, setCurrentView }) => {
+const CoworkingSpaceDetails:React.FC<coworkingSpaceDetailsProps> = ({ currentCoworkingSpace, searchedCity, setCurrentView, setPreviousView, user, previousView, setCurrentCoworkingSpace }) => {
 
   const [isReviewsPage, setIsReviewsPage] = useState<boolean>(false)
   const [reviews, setReviews] = useState<reviewsObject[]>([]);
 
   useEffect(() => {
-    // Fetch reviews when the coworking space is in the database
+    // Fetch reviews whenever the coworking space is updated
     if (currentCoworkingSpace && currentCoworkingSpace.id) {
         fetchReviewsByCoworkingSpaceId (`reviews/${currentCoworkingSpace.id}`)
             .then(data => setReviews(Array.isArray(data) ? data : []))
             .catch(error => console.error('Error fetching reviews:', error))
     }
   }, [currentCoworkingSpace])
+
+  // If the previous view was the login page, show the review page
+  useEffect(() => {
+    if (previousView === 'loginPage') {
+      setIsReviewsPage(true);
+    }
+  }, [previousView]);
     
   const stars: number[] = [0, 0, 0, 0, 0];
 
@@ -45,6 +56,11 @@ const CoworkingSpaceDetails:React.FC<coworkingSpaceDetailsProps> = ({ currentCow
     maximumFractionDigits: 2
   });
 
+  // Update the current coworking space in the parent component
+  const updateCoworkingSpace = (updatedSpace: coworkingResultsObject) => {
+    setCurrentCoworkingSpace(updatedSpace);
+  };
+
   return (
     <Container>
         { currentCoworkingSpace && (
@@ -56,15 +72,15 @@ const CoworkingSpaceDetails:React.FC<coworkingSpaceDetailsProps> = ({ currentCow
                     <Breadcrumb.Item active>{currentCoworkingSpace.name}</Breadcrumb.Item>
                 </Breadcrumb>
 
-                {/* Display coworking space photo */}
+                {/* Display coworking space photo if available*/}
                 {currentCoworkingSpace.photo && <Image src={currentCoworkingSpace.photo} fluid rounded />}
 
                 {/* Display coworking space name and address */}
                 <h1 className='name'>{currentCoworkingSpace.name.trim()}</h1>
                 <p className='address'>{currentCoworkingSpace.address.trim()}</p>
 
-                {/* If the current view is 'reviewPage' */}
-                {isReviewsPage ? <Review currentCoworkingSpace={currentCoworkingSpace}/> : (
+                {/* If user is on the reviews page, render the review component */}
+                {isReviewsPage ? <Review currentCoworkingSpace={currentCoworkingSpace} setIsReviewsPage={setIsReviewsPage} setReviews={setReviews} updateCoworkingSpace={updateCoworkingSpace}/> : (
                     <>
                         {/* Show reviews section */}
                         <h3>Reviews for {currentCoworkingSpace.name}</h3>
@@ -88,11 +104,19 @@ const CoworkingSpaceDetails:React.FC<coworkingSpaceDetailsProps> = ({ currentCow
                             : <p>No reviews</p> // If no rating, show "No reviews"
                         }
 
-                        {/* Render reviews if any exist */}
+                        {/* Render button to allow the user to post a review */}
                         <p className='post-review'>Are you a member?</p>
-                        <Button className="primaryOutline" onClick={() => setIsReviewsPage(true)}>POST A REVIEW</Button>
+                        <Button className="primaryOutline" onClick={() => {
+                            console.log(user)
+                            if (user) {
+                                setIsReviewsPage(true); // Show reviews page if user is logged in
+                            } else {
+                                setPreviousView('detailsPage'); // Store the current view (before login)
+                                setCurrentView('loginPage');
+                            }
+                        }}>POST A REVIEW</Button>
 
-                        {/* Displays each review in detail */}
+                        {/* Display recent reviews */}
                         {reviews.length > 0 && <div className='reviews-container'>
                             <h5>Recent Reviews</h5>
                             {/* Map over reviews and display each one */}

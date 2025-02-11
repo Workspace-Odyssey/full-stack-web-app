@@ -54,3 +54,15 @@ body{
     background-color: transparent;
     color: var(--global-color-primary);
 }
+
+#loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+}
+
+#loadingContainer p {
+margin-top: 10px;
+}

@@ -11,10 +11,8 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-	// origin: '',
-	// methods: ['GET', 'POST'],
-	// allowedHeaders: ['Content-Type', 'Authorization'], // content-type: for sending JSON and form data. // authorization:  used for passing authentication credentials
-	// credentials: true,
+	origin: 'http://localhost:5173',
+	credentials: true, // Allow cookies to be sent with requests
 }));
 
 app.use(session({
@@ -23,8 +21,10 @@ app.use(session({
 	saveUninitialized: false,
 	cookie: {
 		secure: process.env.NODE_ENV === 'production',
+		httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24, // Set the cookie expiration to 1 day
+		sameSite: 'lax',
 	}
-
 }));
 
 app.use('/user', authRoutes);
