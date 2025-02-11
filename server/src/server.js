@@ -41,6 +41,13 @@ app.use(session({
 
 // Serve static files in production
 if (isProduction) {
+	app.use(cors({
+      origin: 'https://workspace-odyssey.onrender.com', // Allowing requests from the deployed frontend
+      methods: ['GET', 'POST'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
+}));
+
 	// Serve static files from the 'dist' directory
 	app.use(express.static(path.join(__dirname, '../../client/dist')));
 
