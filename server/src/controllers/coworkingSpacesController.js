@@ -53,43 +53,34 @@ async function getNearbyCoworkingSpaces (req, res) {
 		const listOfCoworkingSpaces = await nearbySearch(locationCoordinates, 'coworking space');
         
         // Create an array of promises for fetching additional data for each coworking space
-        const coworkingSpacesWithDetails = await listOfCoworkingSpaces.map(async (coworkingSpace) => {
-            // Get nearby transit stations for the coworking space
+        const coworkingSpacesWithDetails = await Promise.all(listOfCoworkingSpaces.map(async (coworkingSpace) => {
             const nearbyStations = await nearbySearch(coworkingSpace.coordinates, 'train_station|subway_station');
-            const nearestStation = nearbyStations && nearbyStations.length > 0 ? nearbyStations[0] : "No station found";
+            const nearestStation = nearbyStations[0];
 
-            // Extract the station's details
             const nearestStationCoordinates = nearestStation.coordinates;
-            const nearestStationName = nearestStation.name
+            const nearestStationName = nearestStation.name;
 
-            // Calculate the distance to the nearest station
             const distanceToStation = await getWalkingDistance(coworkingSpace.coordinates, nearestStationCoordinates);
 
-            // Get coworking space ID from the database
             const coworkingSpaceID = await Coworking.findByGooglePlaceID(coworkingSpace.placeID);
 
             if (coworkingSpaceID) {
-
                 const uuid = coworkingSpaceID.uuid;
 
-                // Fetch reviews data (average rating and number of ratings)
                 const averageRating = await Reviews.getAverageRatingByCoWorkingId(uuid);
                 const totalReviews = await Reviews.getNumberOfRatingsByCoWorkingId(uuid);
 
                 return { ...coworkingSpace, nearestStationName, distanceToStation, averageRating, totalReviews, uuid };
-
             }
 
-            // Return coworking space details without review data if no record found
             return { ...coworkingSpace, nearestStationName, distanceToStation };
-        });
+        }));
 
-        // Wait for all promises to resolve and send the result as a JSON response
-        Promise.all(coworkingSpacesWithDetails)
-            .then((resolvedCoworkingSpaces) => res.json(resolvedCoworkingSpaces))
-	} catch (error) {
-		res.status(500).json({ error: error.message });
-	}
+        res.json(coworkingSpacesWithDetails);
+    } catch (error) {
+        console.error('Error fetching nearby coworking spaces:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 }
 
 // Function to get a photo for a coworking space using its photo reference
