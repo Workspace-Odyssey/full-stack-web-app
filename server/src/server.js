@@ -27,6 +27,11 @@ if (!isProduction) {
 if (isProduction) {
 	// Serve static files from the 'dist' directory
 	app.use(express.static(path.join(__dirname, '../../client/dist')));
+
+	app.use('/user', authRoutes);
+	app.use('/reviews', reviewsRoutes);
+	app.use('/coworking_spaces', coworkingSpacesRoutes);
+	
   	app.get('*', (req, res) => {
 	  res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'));
 	});
