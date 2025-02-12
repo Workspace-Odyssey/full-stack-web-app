@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ setSearchedCity, setSelectedAuth, setCu
             height="30"
             className="d-inline-block align-top"
           />
-          Workspace-Odyssey
+          DESKio
         </Navbar.Brand>
         {/* Search Bar */}
         <Form>
