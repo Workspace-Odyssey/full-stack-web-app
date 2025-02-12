@@ -1,27 +1,27 @@
 h3 {
-    border-bottom: 1px solid #d7dbdd;
-    padding-bottom: 25px;
+  border-bottom: 1px solid #d7dbdd;
+  padding-bottom: 25px;
 }
 
 .subheading {
-    font-size: 1.125rem;
-    margin: 20px 0 10px 0;
+  font-size: 1.125rem;
+  margin: 20px 0 10px 0;
 }
 
 #submit-post {
-    margin-bottom: 100px;
+  margin-bottom: 100px;
 }
 
 #back {
-    margin-bottom: 100px;
+  margin-bottom: 100px;
 }
 
 .error-message {
-    color: red;
-    font-size: 12px;
-    margin: 10px 0 0 0;
+  color: red;
+  font-size: 12px;
+  margin: 10px 0 0 0;
 }
 
 #thank-you {
-    border-bottom: none;
+  border-bottom: none;
 }
