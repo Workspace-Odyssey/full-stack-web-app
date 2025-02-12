@@ -10,13 +10,16 @@ type LandingProps = {
   setCurrentView: React.Dispatch<React.SetStateAction<string>>
 }
 
+// add selector for train station
+// sort local co-working spaces by distance from train station
+
 const LandingPage: React.FC<LandingProps> = ({setSearchedCity, setCurrentView }) => {
     return (<>
     <Card>
       <Card.Img variant="top" src="/src/assets/coworkingBackground.jpg" className="coworking"/>
       <Card.ImgOverlay>
         <div className="allItems">
-         <h1>Where would you like to work?</h1>
+         <h1>Where would you like to work today?</h1>
          <Card.Body>
            <Form>
             <Row>
@@ -41,7 +44,7 @@ const LandingPage: React.FC<LandingProps> = ({setSearchedCity, setCurrentView })
             </Row>
            </Form>
           </Card.Body>
-           <h3>The Code Chrysalis's Largest Coworking Space Marketplace</h3>
+           <h3>Japan's Largest Co-Working Review Space</h3>
         </div>
       </Card.ImgOverlay>
     </Card>

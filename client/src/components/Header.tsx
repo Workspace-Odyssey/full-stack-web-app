@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import logo from '../assets/DESKio_Logo.png'
 import "../styles/Header.css";
 
 type HeaderProps = {
@@ -29,15 +30,15 @@ const Header: React.FC<HeaderProps> = ({ setSearchedCity, setSelectedAuth, setCu
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
         {/* Logo + App Name */}
-        <Navbar.Brand href="#home" onClick={() => setCurrentView('landingPage')}>
+        <Navbar.Brand className="brand-title" href="#home" onClick={() => setCurrentView('landingPage')}>
           <img
-            alt=""
-            src=""
-            width="30"
-            height="30"
+            alt="img"
+            src={logo}
+            width="50"
+            height="50"
             className="d-inline-block align-top"
           />
-          Workspace-Odyssey
+          DESKio
         </Navbar.Brand>
         {/* Search Bar */}
         <Form>
@@ -67,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ setSearchedCity, setSelectedAuth, setCu
           {user ? (
             // Display username and a Logout button if logged in
             <> 
-              <span>Hi, {user}</span>
+              <span className="user-callout">Hi, {user}!</span>
               <Button
                 className="primaryColor"
                 onClick={handleLogout}
