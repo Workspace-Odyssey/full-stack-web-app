@@ -55,6 +55,10 @@ module.exports = {
         rating: `${REVIEW_TABLE}.stars`,
         datePosted: `${REVIEW_TABLE}.created_at`,
         reviewText: `${REVIEW_TABLE}.content`,
+        netRating: `${REVIEW_TABLE}.net_rating`,
+        comfortRating: `${REVIEW_TABLE}.comfort_rating`,
+        noiseRating: `${REVIEW_TABLE}.noise_rating`,
+        costRating: `${REVIEW_TABLE}.cost_rating`,
         username: 'u.username',
       })
       .from(REVIEW_TABLE)
