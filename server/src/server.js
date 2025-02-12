@@ -29,7 +29,7 @@ if (!isProduction) {
 }
 
 app.use(session({
-	secret: process.env.EXPSECRET || 'sdfhuin',
+	secret: process.env.EXPSECRET,
 	resave: false,
 	saveUninitialized: false,
 	cookie: {
