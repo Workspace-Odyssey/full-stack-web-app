@@ -15,7 +15,7 @@ const app = express();
 
 app.use(express.json());
 
-// Get the environment variable to check if it's development or production
+// tells the server whether we're in development (local) or production (live)
 const isProduction = process.env.NODE_ENV === 'production';
 
 // CORS configuration for development

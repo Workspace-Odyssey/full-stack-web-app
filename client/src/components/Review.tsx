@@ -27,19 +27,19 @@ const Review: React.FC<reviewProps> = ({ currentCoworkingSpace, setIsReviewsPage
 
   // Function to handle clicking a star to select the rating
   const handleStarClick = (index: number) => {
-    setRating(index + 1);  // index starts from 0, so +1 to match star count (1-5)
+    setRating(index + 1);  // arrays are 0 indexed, this adds 1 to the rating to match star count
   };
 
-  // Function to submit the review to the back-end
+  // handles submitting the review
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (rating === 0) {
+    if (rating === 0) { // user must select 1 star minimum to submit their rating
       setErrorMessage("Please select a rating.");
       return;
     }
 
     try {
-      // Submit the review to the back-end API
+      // submits the review via the reviews api
       await submitReview(`/reviews/submit/${currentCoworkingSpace?.id}`, {
         username: '',
         datePosted: new Date().toISOString(),
