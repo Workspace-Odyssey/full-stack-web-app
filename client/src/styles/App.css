@@ -1,7 +1,7 @@
 :root {
-  --global-color-primary: #00ECA2;
-  --global-color-primary-muted: #00C0EC;
-  --global-color-secondary: #EC004A;
+  --global-color-primary: #00eca2;
+  --global-color-primary-muted: #00c0ec;
+  --global-color-secondary: #ec004a;
 }
 
 body {
@@ -70,4 +70,8 @@ h6 {
 
 #loadingContainer p {
   margin-top: 10px;
+}
+
+.deskio-green {
+  color: #00c0ec;
 }
