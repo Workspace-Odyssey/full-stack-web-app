@@ -52,24 +52,26 @@ const Header: React.FC<HeaderProps> = ({
           DESKio
         </Navbar.Brand>
         {/* Search Bar */}
-        <Form>
-          <Row>
-            <Col xs="auto">
-              <Form.Control
-                type="text"
-                placeholder="Search"
-                className=" mr-sm-2"
-                onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
-                  if (event.key === 'Enter') {
-                    event.preventDefault();
-                    setSearchedCity((event.target as HTMLInputElement).value);
-                    setCurrentView('resultsPage');
-                  }
-                }}
-              />
-            </Col>
-          </Row>
-        </Form>
+        {currentView !== 'landingPage' && (
+          <Form>
+            <Row>
+              <Col xs="auto">
+                <Form.Control
+                  type="text"
+                  placeholder="Search"
+                  className=" mr-sm-2"
+                  onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault();
+                      setSearchedCity((event.target as HTMLInputElement).value);
+                      setCurrentView('resultsPage');
+                    }
+                  }}
+                />
+              </Col>
+            </Row>
+          </Form>
+        )}
 
         {/* Auth Buttons or User Greeting */}
         <Row>

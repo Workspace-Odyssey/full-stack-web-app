@@ -4,6 +4,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
+import { starIconColor } from './ResultCard';
+import { FaStar } from 'react-icons/fa';
 import '../styles/LandingPage.css';
 import heroImg01 from '../assets/coworkingBackground.jpg';
 
@@ -30,7 +32,12 @@ const LandingPage: React.FC<LandingProps> = ({
   const url: string =
     import.meta.env.MODE === 'development' ? 'http://localhost:8080' : '';
 
-  console.log(url);
+  const stars: number[] = [0, 0, 0, 0, 0];
+
+  const starColor: starIconColor = {
+    orange: '#F2C265',
+    grey: '#a9a9a9',
+  };
 
   const [randomCoworkingSpaces, setRandomCoworkingSpaces] = useState<
     CoworkingSpace[]
@@ -63,16 +70,19 @@ const LandingPage: React.FC<LandingProps> = ({
         <Card.Img variant="top" src={heroImg01} className="coworking" />
         <Card.ImgOverlay>
           <div className="allItems">
-            <h1>Where would you like to work?</h1>
+            <h1 style={{ textAlign: 'left' }}>
+              Where would you like to work
+              <span className="deskio-green">?</span>
+            </h1>
             <Card.Body>
               <Form>
-                <Row>
+                <Row style={{ marginLeft: '-22px' }}>
                   <Col xs="auto">
                     <Form.Control
                       type="text"
                       placeholder="Search by city"
                       className="mr-sm-2"
-                      style={{ width: '32rem' }}
+                      style={{ width: '32rem', border: '2.5px solid #00eca2' }}
                       onKeyDown={(
                         event: React.KeyboardEvent<HTMLInputElement>
                       ) => {
@@ -89,28 +99,49 @@ const LandingPage: React.FC<LandingProps> = ({
                 </Row>
               </Form>
             </Card.Body>
-            <h3>The Code Chrysalis's Largest Coworking Space Marketplace</h3>
+            <h3 style={{ textAlign: 'left' }}>
+              Japan's Largest Co-Working Space Marketplace
+              <span className="deskio-green">!</span>
+            </h3>
           </div>
         </Card.ImgOverlay>
       </Card>
       <div className="random-coworking-spaces">
-        <h2>Explore Coworking Spaces</h2>
+        <h2 className="explore-title">Explore Coworking Spaces</h2>
         <Row>
           {randomCoworkingSpaces.map((space) => (
             <Col key={space.uuid} xs={12} md={6} lg={4}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>{space.name}</Card.Title>
-                  <Card.Text>{space.location}</Card.Text>
-                  <h5>Reviews:</h5>
-                  {space.reviews.map((review, index) => (
-                    <div key={index}>
-                      <p>
-                        <strong>{review.username}</strong>: {review.reviewText}
-                      </p>
-                      <p>Rating: {review.rating}</p>
-                    </div>
-                  ))}
+              <Card className="review-card-outer">
+                <Card.Body className="review-card">
+                  <Card.Title className="random-space-title">
+                    {space.name}
+                  </Card.Title>
+                  <Card.Text className="random-space-location">
+                    {space.location}
+                  </Card.Text>
+                  <div className="review-card-content">
+                    <h5>Reviews</h5>
+                    {space.reviews.map((review, index) => (
+                      <div className="random-space-details" key={index}>
+                        <p className="random-space-username">
+                          {review.username}
+                        </p>
+                        <p className="random-space-text">{review.reviewText}</p>
+                        {stars.map((_, index) => (
+                          <FaStar
+                            key={index}
+                            size={18}
+                            color={
+                              review.rating != undefined &&
+                              review.rating > index
+                                ? starColor.orange
+                                : starColor.grey
+                            }
+                          />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
                 </Card.Body>
               </Card>
             </Col>
