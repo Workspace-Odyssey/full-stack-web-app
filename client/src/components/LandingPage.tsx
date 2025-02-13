@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import '../styles/LandingPage.css';
+import heroImg01 from '../assets/coworkingBackground.jpg';
 
 type LandingProps = {
   setSearchedCity: React.Dispatch<React.SetStateAction<string>>;
@@ -59,11 +60,7 @@ const LandingPage: React.FC<LandingProps> = ({
   return (
     <>
       <Card>
-        <Card.Img
-          variant="top"
-          src="/src/assets/coworkingBackground.jpg"
-          className="coworking"
-        />
+        <Card.Img variant="top" src={heroImg01} className="coworking" />
         <Card.ImgOverlay>
           <div className="allItems">
             <h1>Where would you like to work?</h1>
