@@ -1,26 +1,30 @@
-import { useEffect, useState } from 'react';
-import { coworkingResultsObject } from './App';
+import { useEffect, useState } from "react";
+import { coworkingResultsObject } from "./App";
 import {
   reviewsObject,
   fetchReviewsByCoworkingSpaceId,
-} from '../api/coworkingSpaceReviews';
-import { starIconColor } from './ResultCard';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+} from "../api/coworkingSpaceReviews";
+import { starIconColor } from "./ResultCard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUser,
+  faSquareCheck,
+  faSquareXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   FaCouch,
   FaStar,
   FaWifi,
   FaDollarSign,
   FaHeadphones,
-} from 'react-icons/fa';
-import Image from 'react-bootstrap/Image';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Accordion from 'react-bootstrap/Accordion';
-import '../styles/CoworkingSpaceDetails.css';
-import Review from './Review';
+} from "react-icons/fa";
+import Image from "react-bootstrap/Image";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Accordion from "react-bootstrap/Accordion";
+import "../styles/CoworkingSpaceDetails.css";
+import Review from "./Review";
 
 interface coworkingSpaceDetailsProps {
   currentCoworkingSpace: coworkingResultsObject | undefined;
@@ -59,6 +63,10 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
   useEffect(() => {
     if (previousView === "loginPage") {
       setIsReviewsPage(true);
+    } else if (previousView === 'resultCardView') {
+      setIsReviewsPage(false);
+    } else if (previousView === 'resultCardReview') {
+      setIsReviewsPage(true);
     }
   }, [previousView]);
 
@@ -66,7 +74,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
 
   const starColor: starIconColor = {
     orange: "#F2C265",
-    grey: "a9a9a9",
+    grey: "#a9a9a9",
   };
 
   // Formatter for the rating to always display 2 decimal places
@@ -157,20 +165,63 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
               <p className="post-review">Are you a member?</p>
               <Button
                 className="primaryOutline post-review-button"
-                onClick={() => {
+                onClick={async () => {
                   console.log(user);
-                  if (user) {
-                    setIsReviewsPage(true); // Show reviews page if user is logged in
-                  } else {
-
-                    setPreviousView("detailsPage"); // Store the current view (before login)
+                  if (!user) {
+                    setPreviousView("detailsPage");
                     setCurrentView("loginPage");
+                    return;
+                  }
+
+                  // User is logged in, check for existing review
+                  const userId = localStorage.getItem("uuid");
+
+                  try {
+                    // Get ID from currentCoworkingSpace prop
+                    const coworkingId = currentCoworkingSpace?.id;
+
+                    if (!coworkingId) {
+                      console.error("No coworking space ID found");
+                      return;
+                    }
+
+                    const response = await fetch("/reviews/check", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        userId,
+                        coworkingId,
+                      }),
+                    });
+
+                    // Handle 404 case (location not in database yet)
+                    if (response.status === 404) {
+                      setIsReviewsPage(true);
+                      return;
+                    }
+
+                    const data = await response.json();
+
+                    if (data.hasReviewed) {
+                      alert("You have already reviewed this co-working space");
+
+                      return;
+                    }
+
+                    // if we've made it here, the user can post a review. yay!
+                    setIsReviewsPage(true);
+                  } catch (error) {
+                    console.log("Review check error:", error.message); // not sure what's causing this type error
+
+                    // if there's an error in checking, allow the review anyway
+                    setIsReviewsPage(true);
                   }
                 }}
               >
                 POST A REVIEW
               </Button>
-
               {/* Display recent reviews */}
               {reviews.length > 0 && (
                 <div className="reviews-container">
@@ -178,6 +229,8 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                   {/* Map over reviews and display each one */}
                   {reviews.length > 0 &&
                     reviews.map((review) => {
+                      console.log(review);
+
                       const date: string = new Date(
                         review.datePosted
                       ).toLocaleDateString("en-US", {
@@ -213,9 +266,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                           <p className="content">{review.reviewText}</p>
                           <Accordion>
                             <Accordion.Item eventKey="0">
-                              <Accordion.Header>
-                                Detailed Review
-                              </Accordion.Header>
+                              <Accordion.Header>Details</Accordion.Header>
                               <Accordion.Body>
                                 {review.netRating && review.netRating > 0 ? (
                                   <>
@@ -299,6 +350,74 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                                     </div>
                                   </>
                                 ) : null}
+                                <h5>Amenities</h5>
+                                <div className="amenities">
+                                  {review.hasPrivateRooms ? (
+                                    <p>
+                                      Private rooms:{" "}
+                                      <FontAwesomeIcon
+                                        icon={faSquareCheck}
+                                        color="green"
+                                      />
+                                    </p>
+                                  ) : (
+                                    <p>
+                                      Private rooms:{" "}
+                                      <FontAwesomeIcon icon={faSquareXmark} color="red"/>
+                                    </p>
+                                  )}
+                                  {review.hasCafe ? (
+                                    <p>
+                                      Cafe:{" "}
+                                      <FontAwesomeIcon
+                                        icon={faSquareCheck}
+                                        color="green"
+                                      />
+                                    </p>
+                                  ) : (
+                                    <p>
+                                      Cafe:{" "}
+                                      <FontAwesomeIcon
+                                        icon={faSquareXmark}
+                                        color="red"
+                                      />
+                                    </p>
+                                  )}
+                                  {review.hasParking ? (
+                                    <p>
+                                      Parking:{" "}
+                                      <FontAwesomeIcon
+                                        icon={faSquareCheck}
+                                        color="green"
+                                      />
+                                    </p>
+                                  ) : (
+                                    <p>
+                                      Parking:{" "}
+                                      <FontAwesomeIcon
+                                        icon={faSquareXmark}
+                                        color="red"
+                                      />
+                                    </p>
+                                  )}
+                                  {review.hasAircon ? (
+                                    <p>
+                                      Aircon:{" "}
+                                      <FontAwesomeIcon
+                                        icon={faSquareCheck}
+                                        color="green"
+                                      />
+                                    </p>
+                                  ) : (
+                                    <p>
+                                      Aircon:{" "}
+                                      <FontAwesomeIcon
+                                        icon={faSquareXmark}
+                                        color="red"
+                                      />
+                                    </p>
+                                  )}
+                                </div>
                               </Accordion.Body>
                             </Accordion.Item>
                           </Accordion>

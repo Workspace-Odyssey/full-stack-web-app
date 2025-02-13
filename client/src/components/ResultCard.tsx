@@ -7,7 +7,6 @@ import Button from 'react-bootstrap/Button';
 import { FaStar } from 'react-icons/fa';
 import { FaTrain } from 'react-icons/fa';
 import fetchPhotoByPhotoReference from '../api/coworkingPhoto';
-import axios from 'axios';
 import { AxiosError } from 'axios';
 import { coworkingResultsObject } from './App';
 
@@ -21,6 +20,7 @@ interface ResultCardProps {
   id?: string;
   address: string;
   setCurrentView: React.Dispatch<React.SetStateAction<string>>;
+  setPreviousView: React.Dispatch<React.SetStateAction<string>>;
   setCurrentCoworkingSpace: React.Dispatch<
     React.SetStateAction<coworkingResultsObject | undefined>
   >;
@@ -41,6 +41,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
   id,
   address,
   setCurrentView,
+  setPreviousView,
   setCurrentCoworkingSpace,
 }) => {
   // Array needed to loop through for correct stars amount.
@@ -49,7 +50,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
   // Colors to use for stars Icon
   const starColor: starIconColor = {
     orange: '#F2C265',
-    grey: 'a9a9a9',
+    grey: '#a9a9a9',
   };
 
   //States
@@ -104,7 +105,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
               <div id="trainIcon">
                 <FaTrain />
               </div>
-              {/* Display the station info for the passed in station*/}
+              {/* display the station info for the passed in station */}
               <Card.Text>
                 {nearestStation} {stationDistance} m
               </Card.Text>
@@ -113,8 +114,82 @@ const ResultCard: React.FC<ResultCardProps> = ({
           <Button
             className="cardViewBtn primaryColor"
             onClick={async () => {
-              setCurrentView('detailsPage');
+              const userId = localStorage.getItem('uuid');
 
+              if (!userId) {
+                alert('Please log in to leave a review');
+                return;
+              }
+
+              try {
+                // we get a lot of 404s due to the way the database is constructed
+                // this module handles quieting the 404s until we can sort out the database insertions
+                const checkReview = async () => {
+                  try {
+                    const response = await fetch('/reviews/check', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        userId,
+                        coworkingId: id,
+                      }),
+                    });
+
+                    // if we don't get a 404, proceed
+                    if (response.status !== 404) {
+                      const data = await response.json();
+                      if (data.hasReviewed) {
+                        return { canReview: false };
+                      }
+                    }
+                    // continue normal logic
+                    return { canReview: true };
+                  } catch (error) {
+                    // Log error but don't throw
+                    if (error instanceof Error) {
+                      console.log('Review check returned:', error.message); // not sure what's causing this type error
+                    }
+                    return { canReview: true };
+                  }
+                };
+
+                const { canReview } = await checkReview();
+
+                if (!canReview) {
+                  alert('You have already reviewed this co-working space');
+                  return;
+                }
+
+                // If we get here, user can leave a review
+                setCurrentView('detailsPage');
+                setPreviousView('resultCardReview');
+                setCurrentCoworkingSpace({
+                  photo: photoUrl,
+                  name,
+                  rating,
+                  totalReviews,
+                  nearestStation,
+                  stationDistance,
+                  id,
+                  address,
+                });
+              } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again.');
+              }
+            }}
+          >
+            Post a Review
+          </Button>
+
+          {/* allows the user to simply view details if they can't / don't want to review */}
+          <Button
+            className="primaryOutline details-button"
+            onClick={() => {
+              setCurrentView('detailsPage'); // go directly to details page bypssing forced review
+              setPreviousView('resultCardView');
               setCurrentCoworkingSpace({
                 photo: photoUrl,
                 name,
@@ -127,7 +202,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
               });
             }}
           >
-            View
+            VIEW DETAILS
           </Button>
         </Col>
       </Row>

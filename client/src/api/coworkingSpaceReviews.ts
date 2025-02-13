@@ -17,6 +17,10 @@ export interface reviewsObject {
   comfortRating?: number;
   noiseRating?: number;
   costRating?: number;
+  hasPrivateRooms?: boolean;
+  hasCafe?: boolean;
+  hasParking?: boolean;
+  hasAircon?: boolean;
 }
 
 // Function to fetch reviews for a specific coworking space by ID

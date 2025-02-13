@@ -22,6 +22,13 @@ type CoworkingSpace = {
   }>;
 }
 
+const imageListHref = [
+  '../assets/pexels-ketut-subiyanto-4623501.jpg',
+  '../assets/pexels-proxyclick-2451646.jpg',
+  '../assets/pexels-wildlittlethingsphoto-1015568.jpg',
+  '../assets/pexels-wildlittlethingsphoto-933964.jpg'
+]
+
 const LandingPage: React.FC<LandingProps> = ({ setSearchedCity, setCurrentView }) => {
   const [randomCoworkingSpaces, setRandomCoworkingSpaces] = useState<CoworkingSpace[]>([]);
 
@@ -44,10 +51,9 @@ const LandingPage: React.FC<LandingProps> = ({ setSearchedCity, setCurrentView }
         }
       }
     };
-
     fetchRandomCoworkingSpaces();
   }, []);
-
+  
   return (
     <>
       <Card>

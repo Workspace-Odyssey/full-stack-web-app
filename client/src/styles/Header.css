@@ -1,20 +1,23 @@
 .btn:first-child:active {
-    background-color: var(--global-color-primary);
+  background-color: var(--global-color-primary);
 }
 
 span {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .brand-title {
-    font-family: "Anton", sans-serif;
-    font-weight: 400;
-    font-size: 2rem;
+  font-family: "Anton", sans-serif;
+  font-weight: 400;
+  font-size: 2rem;
 }
 
 .user-callout {
-    font-family: "Anton", sans-serif;
-    font-weight: 300;
-    font-size: 1.5rem;
+  font-family: "Anton", sans-serif;
+  font-weight: 300;
+  font-size: 1.5rem;
 }
 
+.logged-in {
+  display: flex;
+}
