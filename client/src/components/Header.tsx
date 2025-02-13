@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({
             src={logo}
             width="50"
             height="50"
-            className="d-inline-block align-top"
+            className="d-inline-block align-top graphic"
           />
           DESKio
         </Navbar.Brand>

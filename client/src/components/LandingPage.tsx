@@ -13,6 +13,13 @@ type LandingProps = {
 // add selector for train station
 // sort local co-working spaces by distance from train station
 
+const imageListHref = [
+  '../assets/pexels-ketut-subiyanto-4623501.jpg',
+  '../assets/pexels-proxyclick-2451646.jpg',
+  '../assets/pexels-wildlittlethingsphoto-1015568.jpg',
+  '../assets/pexels-wildlittlethingsphoto-933964.jpg'
+]
+
 const LandingPage: React.FC<LandingProps> = ({setSearchedCity, setCurrentView }) => {
     return (<>
     <Card>
