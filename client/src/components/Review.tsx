@@ -34,6 +34,10 @@ const Review: React.FC<reviewProps> = ({
   const [comfortRating, setComfortRating] = useState<number>(0);
   const [noiseRating, setNoiseRating] = useState<number>(0);
   const [costRating, setCostRating] = useState<number>(0);
+  const [hasPrivateRooms, setHasPrivateRooms] = useState<boolean>(false);
+  const [hasCafe, setHasCafe] = useState<boolean>(false);
+  const [hasParking, setHasParking] = useState<boolean>(false);
+  const [hasAircon, setHasAircon] = useState<boolean>(false);
   const [reviewText, setReviewText] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
@@ -65,9 +69,10 @@ const Review: React.FC<reviewProps> = ({
   // handles submitting the review
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (rating === 0) { // user must select 1 star minimum to submit their rating
-      setErrorMessage("Please select a rating.");
+
+    if (rating === 0) {
+      // user must select 1 star minimum to submit their rating
+      setErrorMessage('Please select a rating.');
       return;
     }
 
@@ -82,6 +87,10 @@ const Review: React.FC<reviewProps> = ({
         comfortRating,
         noiseRating,
         costRating,
+        hasPrivateRooms,
+        hasCafe,
+        hasParking,
+        hasAircon,
       });
 
       // Reset error and review input fields, and show success message
@@ -211,10 +220,34 @@ const Review: React.FC<reviewProps> = ({
                 type="switch"
                 id="custom-switch"
                 label="Private Rooms"
+                onChange={(e) => {
+                  setHasPrivateRooms(e.target.checked);
+                }}
               />
-              <Form.Check type="switch" id="custom-switch" label="Cafe" />
-              <Form.Check type="switch" id="custom-switch" label="Parking" />
-              <Form.Check type="switch" id="custom-switch" label="Aircon" />
+              <Form.Check
+                type="switch"
+                id="custom-switch"
+                label="Cafe"
+                onChange={(e) => {
+                  setHasCafe(e.target.checked);
+                }}
+              />
+              <Form.Check
+                type="switch"
+                id="custom-switch"
+                label="Parking"
+                onChange={(e) => {
+                  setHasParking(e.target.checked);
+                }}
+              />
+              <Form.Check
+                type="switch"
+                id="custom-switch"
+                label="Aircon"
+                onChange={(e) => {
+                  setHasAircon(e.target.checked);
+                }}
+              />
             </div>
 
             {/* Display error message if no rating is selected */}

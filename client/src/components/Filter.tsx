@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import Form from "react-bootstrap/Form";
-import "../styles/Filter.css";
-import { coworkingResultsObject } from "./App";
+import { useState, useEffect } from 'react';
+import Form from 'react-bootstrap/Form';
+import '../styles/Filter.css';
+import { coworkingResultsObject } from './App';
 
 interface filterProps {
   resultsLength: number;
@@ -23,13 +23,11 @@ const Filter: React.FC<filterProps> = ({
       // sorts list by rating
       const sorted = [...searchResults].sort((a, b) => {
         const ratingA = a.rating || 0;
-        console.log(ratingA);
         const ratingB = b.rating || 0;
-
         // Sorting based on the 'order' parameter
-        if (order === "desc") {
+        if (order === 'desc') {
           return ratingB - ratingA;
-        } else if (order === "asc") {
+        } else if (order === 'asc') {
           return ratingA - ratingB;
         }
         return 0;
@@ -43,10 +41,10 @@ const Filter: React.FC<filterProps> = ({
         const distanceA = a.stationDistance || 0;
         const distanceB = b.stationDistance || 0;
 
-        if (order === "closestToStation") {
+        if (order === 'closestToStation') {
           console.log(`Sorting by distance - closest...`);
           return distanceA - distanceB; // closest first
-        } else if (order === "farthestFromStation") {
+        } else if (order === 'farthestFromStation') {
           console.log(`Sorting by distance - farthest...`);
           return distanceB - distanceA; // farthest first
         }
@@ -57,13 +55,13 @@ const Filter: React.FC<filterProps> = ({
 
     function sortSearchResultsByQuantity(order: string) {
       // sorts results by number of ratings total
-      const sorted = [...searchResults].sort((a, b)  => {
+      const sorted = [...searchResults].sort((a, b) => {
         const quantityA = a.totalReviews || 0;
         const quantityB = b.totalReviews || 0;
 
-        if (order === "mostRated") {
-          console.log(`Sorting by most number of ratings...`)
-          return quantityB - quantityA
+        if (order === 'mostRated') {
+          console.log(`Sorting by most number of ratings...`);
+          return quantityB - quantityA;
         }
         return 0;
       });
@@ -73,19 +71,19 @@ const Filter: React.FC<filterProps> = ({
     // Check the selected filter and apply sorting
 
     switch (true) {
-      case selectedFilter === "lowToHigh":
-        setSearchResults(sortSearchResultsByRating("asc")); // sorts 'ratings' search results highest to lowest
+      case selectedFilter === 'lowToHigh':
+        setSearchResults(sortSearchResultsByRating('asc')); // sorts 'ratings' search results highest to lowest
         break;
-      case selectedFilter === "highToLow":
-        setSearchResults(sortSearchResultsByRating("desc")); // sorts 'ratings' search results lowest to highest
+      case selectedFilter === 'highToLow':
+        setSearchResults(sortSearchResultsByRating('desc')); // sorts 'ratings' search results lowest to highest
         break;
-      case selectedFilter === "closestToStation":
-        setSearchResults(sortSearchResultsByDistance("closestToStation")); // sorts 'distance' search results closest to furthest
+      case selectedFilter === 'closestToStation':
+        setSearchResults(sortSearchResultsByDistance('closestToStation')); // sorts 'distance' search results closest to furthest
         break;
-      case selectedFilter === "farthestFromStation":
-        setSearchResults(sortSearchResultsByDistance("farthestFromStation")); // sorts 'distance' search results farthest to closest
+      case selectedFilter === 'farthestFromStation':
+        setSearchResults(sortSearchResultsByDistance('farthestFromStation')); // sorts 'distance' search results farthest to closest
         break;
-      case selectedFilter === "mostRated":
+      case selectedFilter === 'mostRated':
         setSearchResults(sortSearchResultsByQuantity('mostRated'));
         break;
     }
@@ -97,8 +95,8 @@ const Filter: React.FC<filterProps> = ({
         <Form.Check
           name="sortFilter"
           label="Highest Rated"
-          type={"radio"}
-          id={"highToLow"}
+          type={'radio'}
+          id={'highToLow'}
           className="filter-radio"
           disabled={resultsLength < 1 ? true : false}
           onChange={(event) => setSelectedFilter(event.target.id)}
@@ -106,8 +104,8 @@ const Filter: React.FC<filterProps> = ({
         <Form.Check
           name="sortFilter"
           label="Lowest Rated"
-          type={"radio"}
-          id={"lowToHigh"}
+          type={'radio'}
+          id={'lowToHigh'}
           className="filter-radio"
           disabled={resultsLength < 1 ? true : false}
           onChange={(event) => setSelectedFilter(event.target.id)}
@@ -115,8 +113,8 @@ const Filter: React.FC<filterProps> = ({
         <Form.Check
           name="sortFilter"
           label="Closest to Station"
-          type={"radio"}
-          id={"closestToStation"}
+          type={'radio'}
+          id={'closestToStation'}
           className="filter-radio"
           disabled={resultsLength < 1 ? true : false}
           onChange={(event) => setSelectedFilter(event.target.id)}
@@ -124,8 +122,8 @@ const Filter: React.FC<filterProps> = ({
         <Form.Check
           name="sortFilter"
           label="Furthest from Station"
-          type={"radio"}
-          id={"farthestFromStation"}
+          type={'radio'}
+          id={'farthestFromStation'}
           className="filter-radio"
           disabled={resultsLength < 1 ? true : false}
           onChange={(event) => setSelectedFilter(event.target.id)}
@@ -133,8 +131,8 @@ const Filter: React.FC<filterProps> = ({
         <Form.Check
           name="sortFilter"
           label="Most Rated"
-          type={"radio"}
-          id={"mostRated"}
+          type={'radio'}
+          id={'mostRated'}
           className="filter-radio"
           disabled={resultsLength < 1 ? true : false}
           onChange={(event) => setSelectedFilter(event.target.id)}

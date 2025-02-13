@@ -9,16 +9,20 @@ const knex = require("../knex");
 const { validProps, requiredProps } = require("../util/validation");
 
 const validateProps = validProps([
-  "id",
-  "content",
-  "stars",
-  "user_id",
-  "coworking_id",
-  "created_at",
-  "net_rating",
-  "comfort_rating",
-  "noise_rating",
-  "cost_rating",
+  'id',
+  'content',
+  'stars',
+  'user_id',
+  'coworking_id',
+  'created_at',
+  'net_rating',
+  'comfort_rating',
+  'noise_rating',
+  'cost_rating',
+  'has_private_rooms',
+  'has_cafe',
+  'has_parking',
+  'has_aircon',
 ]);
 
 const validateRequired = requiredProps([
@@ -67,7 +71,11 @@ module.exports = {
         comfortRating: `${REVIEW_TABLE}.comfort_rating`,
         noiseRating: `${REVIEW_TABLE}.noise_rating`,
         costRating: `${REVIEW_TABLE}.cost_rating`,
-        username: "u.username",
+        hasPrivateRooms: `${REVIEW_TABLE}.has_private_rooms`,
+        hasCafe: `${REVIEW_TABLE}.has_cafe`,
+        hasParking: `${REVIEW_TABLE}.has_parking`,
+        hasAircon: `${REVIEW_TABLE}.has_aircon`,
+        username: 'u.username',
       })
       .from(REVIEW_TABLE)
       .innerJoin("coworkings as c", function () {
