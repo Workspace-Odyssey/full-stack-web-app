@@ -62,16 +62,17 @@ const Review: React.FC<reviewProps> = ({
     setCostRating(index + 1); // index starts from 0, so +1 to match star count (1-5)
   };
 
-  // Function to submit the review to the back-end
+  // handles submitting the review
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (rating === 0) {
-      setErrorMessage('Please select a rating.');
+    
+    if (rating === 0) { // user must select 1 star minimum to submit their rating
+      setErrorMessage("Please select a rating.");
       return;
     }
 
     try {
-      // Submit the review to the back-end API
+      // submits the review via the reviews api
       await submitReview(`/reviews/submit/${currentCoworkingSpace?.id}`, {
         username: '',
         datePosted: new Date().toISOString(),

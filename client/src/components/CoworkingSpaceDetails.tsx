@@ -51,17 +51,13 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
     if (currentCoworkingSpace && currentCoworkingSpace.id) {
       fetchReviewsByCoworkingSpaceId(`reviews/${currentCoworkingSpace.id}`)
         .then((data) => setReviews(Array.isArray(data) ? data : []))
-        .catch((error) => console.error('Error fetching reviews:', error));
+        .catch((error) => console.error("Error fetching reviews:", error));
     }
   }, [currentCoworkingSpace]);
 
-  useEffect(() => {
-    console.log(reviews);
-  }, [reviews]);
-
   // If the previous view was the login page, show the review page
   useEffect(() => {
-    if (previousView === 'loginPage') {
+    if (previousView === "loginPage") {
       setIsReviewsPage(true);
     }
   }, [previousView]);
@@ -69,12 +65,12 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
   const stars: number[] = [0, 0, 0, 0, 0];
 
   const starColor: starIconColor = {
-    orange: '#F2C265',
-    grey: 'a9a9a9',
+    orange: "#F2C265",
+    grey: "a9a9a9",
   };
 
   // Formatter for the rating to always display 2 decimal places
-  const formattedRating = new Intl.NumberFormat('en-US', {
+  const formattedRating = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -90,7 +86,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
         <div>
           {/* Allows for easy navigation back to the search results */}
           <Breadcrumb>
-            <Breadcrumb.Item onClick={() => setCurrentView('resultsPage')}>
+            <Breadcrumb.Item onClick={() => setCurrentView("resultsPage")}>
               {searchedCity}
             </Breadcrumb.Item>
             <Breadcrumb.Item active>
@@ -100,7 +96,13 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
 
           {/* Display coworking space photo if available*/}
           {currentCoworkingSpace.photo && (
-            <Image src={currentCoworkingSpace.photo} fluid rounded />
+            <Image
+              src={currentCoworkingSpace.photo}
+              fluid
+              rounded
+              className="img-fluid" // ensures photo display is responsive
+              style={{ maxWidth: "600px", height: "auto" }}
+            />
           )}
 
           {/* Display coworking space name and address */}
@@ -160,8 +162,9 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                   if (user) {
                     setIsReviewsPage(true); // Show reviews page if user is logged in
                   } else {
-                    setPreviousView('detailsPage'); // Store the current view (before login)
-                    setCurrentView('loginPage');
+
+                    setPreviousView("detailsPage"); // Store the current view (before login)
+                    setCurrentView("loginPage");
                   }
                 }}
               >
@@ -177,10 +180,10 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                     reviews.map((review) => {
                       const date: string = new Date(
                         review.datePosted
-                      ).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
+                      ).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
                       });
                       return (
                         <div key={review.username} className="single-review">
