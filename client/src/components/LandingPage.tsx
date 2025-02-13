@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import '../styles/LandingPage.css';
 
 type LandingProps = {
-  setSearchedCity: React.Dispatch<React.SetStateAction<string>>
-  setCurrentView: React.Dispatch<React.SetStateAction<string>>
-}
+  setSearchedCity: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentView: React.Dispatch<React.SetStateAction<string>>;
+};
 
 type CoworkingSpace = {
   uuid: string;
@@ -20,29 +20,28 @@ type CoworkingSpace = {
     rating: number;
     reviewText: string;
   }>;
-}
+};
 
-const imageListHref = [
-  '../assets/pexels-ketut-subiyanto-4623501.jpg',
-  '../assets/pexels-proxyclick-2451646.jpg',
-  '../assets/pexels-wildlittlethingsphoto-1015568.jpg',
-  '../assets/pexels-wildlittlethingsphoto-933964.jpg'
-]
-
-const LandingPage: React.FC<LandingProps> = ({ setSearchedCity, setCurrentView }) => {
-  const [randomCoworkingSpaces, setRandomCoworkingSpaces] = useState<CoworkingSpace[]>([]);
+const LandingPage: React.FC<LandingProps> = ({
+  setSearchedCity,
+  setCurrentView,
+}) => {
+  const [randomCoworkingSpaces, setRandomCoworkingSpaces] = useState<
+    CoworkingSpace[]
+  >([]);
 
   useEffect(() => {
     const fetchRandomCoworkingSpaces = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/coworking_spaces/random`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/coworking_spaces/random`
+        );
         if (Array.isArray(response.data)) {
           setRandomCoworkingSpaces(response.data);
         } else {
           console.error('Unexpected response format:', response.data);
         }
       } catch (error) {
-        
         console.error('Error fetching random coworking spaces:', error);
         if ((error as any).response) {
           console.log('Response:', (error as any).response.data);
@@ -53,11 +52,15 @@ const LandingPage: React.FC<LandingProps> = ({ setSearchedCity, setCurrentView }
     };
     fetchRandomCoworkingSpaces();
   }, []);
-  
+
   return (
     <>
       <Card>
-        <Card.Img variant="top" src="/src/assets/coworkingBackground.jpg" className="coworking" />
+        <Card.Img
+          variant="top"
+          src="/src/assets/coworkingBackground.jpg"
+          className="coworking"
+        />
         <Card.ImgOverlay>
           <div className="allItems">
             <h1>Where would you like to work?</h1>
@@ -70,15 +73,17 @@ const LandingPage: React.FC<LandingProps> = ({ setSearchedCity, setCurrentView }
                       placeholder="Search by city"
                       className="mr-sm-2"
                       style={{ width: '32rem' }}
-                      onKeyDown={
-                        (event: React.KeyboardEvent<HTMLInputElement>) => {
-                          if (event.key === 'Enter') {
-                            event.preventDefault();
-                            setSearchedCity((event.target as HTMLInputElement).value)
-                            setCurrentView('resultsPage');
-                          }
+                      onKeyDown={(
+                        event: React.KeyboardEvent<HTMLInputElement>
+                      ) => {
+                        if (event.key === 'Enter') {
+                          event.preventDefault();
+                          setSearchedCity(
+                            (event.target as HTMLInputElement).value
+                          );
+                          setCurrentView('resultsPage');
                         }
-                      }
+                      }}
                     />
                   </Col>
                 </Row>
@@ -91,7 +96,7 @@ const LandingPage: React.FC<LandingProps> = ({ setSearchedCity, setCurrentView }
       <div className="random-coworking-spaces">
         <h2>Explore Coworking Spaces</h2>
         <Row>
-          {randomCoworkingSpaces.map(space => (
+          {randomCoworkingSpaces.map((space) => (
             <Col key={space.uuid} xs={12} md={6} lg={4}>
               <Card>
                 <Card.Body>
@@ -100,7 +105,9 @@ const LandingPage: React.FC<LandingProps> = ({ setSearchedCity, setCurrentView }
                   <h5>Reviews:</h5>
                   {space.reviews.map((review, index) => (
                     <div key={index}>
-                      <p><strong>{review.username}</strong>: {review.reviewText}</p>
+                      <p>
+                        <strong>{review.username}</strong>: {review.reviewText}
+                      </p>
                       <p>Rating: {review.rating}</p>
                     </div>
                   ))}
