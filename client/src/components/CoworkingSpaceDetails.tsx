@@ -160,20 +160,63 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
               {/* Render button to allow the user to post a review */}
               <p className="post-review">Are you a member?</p>
               <Button
-                className="primaryOutline post-review-button"
-                onClick={() => {
-                  console.log(user);
-                  if (user) {
-                    setIsReviewsPage(true); // Show reviews page if user is logged in
-                  } else {
-                    setPreviousView('detailsPage'); // Store the current view (before login)
-                    setCurrentView('loginPage');
-                  }
-                }}
-              >
-                POST A REVIEW
-              </Button>
+  className="primaryOutline post-review-button"
+  onClick={async () => {
+    console.log(user);
+    if (!user) {
+      setPreviousView("detailsPage");
+      setCurrentView("loginPage");
+      return;
+    }
 
+    // User is logged in, check for existing review
+    const userId = localStorage.getItem('uuid');
+    
+    try {
+      // Get ID from currentCoworkingSpace prop
+      const coworkingId = currentCoworkingSpace?.id;
+      
+      if (!coworkingId) {
+        console.error('No coworking space ID found');
+        return;
+      }
+
+      const response = await fetch('/reviews/check', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          coworkingId
+        })
+      });
+
+      // Handle 404 case (location not in database yet)
+      if (response.status === 404) {
+        setIsReviewsPage(true);
+        return;
+      }
+
+      const data = await response.json();
+      
+      if (data.hasReviewed) {
+        alert('You have already reviewed this co-working space');
+        return;
+      }
+
+      // if we've made it here, the user can post a review. yay!
+      setIsReviewsPage(true);
+
+    } catch (error) {
+      console.log('Review check error:', error.message); // not sure what's causing this type error
+      // if there's an error in checking, allow the review anyway
+      setIsReviewsPage(true);
+    }
+  }}
+>
+  POST A REVIEW
+</Button>
               {/* Display recent reviews */}
               {reviews.length > 0 && (
                 <div className="reviews-container">

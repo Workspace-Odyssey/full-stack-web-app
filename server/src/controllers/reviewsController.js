@@ -60,4 +60,29 @@ async function submitReview(req, res) {
   }
 }
 
-module.exports = { submitReview, getAllReviewsByCoWorkingSpace };
+// Function to check if the current user already has a review on the current location
+const checkExistingReview = async (req, res) => {
+  console.log('Check review request received:', req.body);
+  const { userId, coworkingId } = req.body;
+
+  try {
+    console.log('Querying with:', { userId, coworkingId });
+    
+    // changed to a direct db query using checkExisting
+    const result = await Reviews.checkExisting(userId, coworkingId);
+
+    console.log('Query result:', result);
+
+    res.json({
+      hasReviewed: result.length > 0
+    });
+  } catch (error) {
+    console.error('Full error details:', error);
+    res.status(500).json({ 
+      error: 'Internal server error', 
+      details: error.message 
+    });
+  }
+};
+
+module.exports = { submitReview, getAllReviewsByCoWorkingSpace, checkExistingReview };
