@@ -63,6 +63,10 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
   useEffect(() => {
     if (previousView === "loginPage") {
       setIsReviewsPage(true);
+    } else if (previousView === 'resultCardView') {
+      setIsReviewsPage(false);
+    } else if (previousView === 'resultCardReview') {
+      setIsReviewsPage(true);
     }
   }, [previousView]);
 
@@ -202,6 +206,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
 
                     if (data.hasReviewed) {
                       alert("You have already reviewed this co-working space");
+
                       return;
                     }
 
@@ -209,6 +214,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                     setIsReviewsPage(true);
                   } catch (error) {
                     console.log("Review check error:", error.message); // not sure what's causing this type error
+
                     // if there's an error in checking, allow the review anyway
                     setIsReviewsPage(true);
                   }
@@ -357,7 +363,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                                   ) : (
                                     <p>
                                       Private rooms:{" "}
-                                      <FontAwesomeIcon icon={faSquareXmark} />
+                                      <FontAwesomeIcon icon={faSquareXmark} color="red"/>
                                     </p>
                                   )}
                                   {review.hasCafe ? (
