@@ -43,7 +43,7 @@ const Review: React.FC<reviewProps> = ({
   const [successMessage, setSuccessMessage] = useState<string>('');
 
   const starColor = '#F2C265';
-  const starColorEmpty = 'a9a9a9';
+  const starColorEmpty = '#a9a9a9';
 
   // Function to handle clicking a star to select the rating
   const handleStarClick = (index: number) => {
