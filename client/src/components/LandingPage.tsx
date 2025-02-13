@@ -26,6 +26,11 @@ const LandingPage: React.FC<LandingProps> = ({
   setSearchedCity,
   setCurrentView,
 }) => {
+  const url: string =
+    import.meta.env.MODE === 'development' ? 'http://localhost:8080' : '';
+
+  console.log(url);
+
   const [randomCoworkingSpaces, setRandomCoworkingSpaces] = useState<
     CoworkingSpace[]
   >([]);
@@ -33,9 +38,7 @@ const LandingPage: React.FC<LandingProps> = ({
   useEffect(() => {
     const fetchRandomCoworkingSpaces = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/coworking_spaces/random`
-        );
+        const response = await axios.get(`${url}/coworking_spaces/random`);
         if (Array.isArray(response.data)) {
           setRandomCoworkingSpaces(response.data);
         } else {
