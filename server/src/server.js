@@ -1,3 +1,4 @@
+require('dotenv').config({ path: './.env.local' });
 const express = require('express');
 const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
@@ -7,6 +8,7 @@ const coworkingSpacesRoutes = require('./routes/coworkingSpaceRoutes');
 const authRoutes = require('./routes/authRoutes')
 const reviewsRoutes = require('./routes/reviewRoutes');
 const path = require("path");
+
 
 const PORT = process.env.PORT;
 const app = express();
