@@ -5,6 +5,6 @@ const coworkingSpacesController = require('../controllers/coworkingSpacesControl
 router.get('/nearby', coworkingSpacesController.getNearbyCoworkingSpaces);
 router.post('/register', coworkingSpacesController.registerCoworkingSpace);
 router.get('/photo', coworkingSpacesController.getPhotoOfCoworkingSpace);
-
+router.get('/random', coworkingSpacesController.getRandomCoworkingSpaces);
 
 module.exports = router;
