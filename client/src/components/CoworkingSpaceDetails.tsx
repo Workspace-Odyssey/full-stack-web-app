@@ -1,19 +1,26 @@
-import { useEffect, useState } from "react";
-import { coworkingResultsObject } from "./App";
+import { useEffect, useState } from 'react';
+import { coworkingResultsObject } from './App';
 import {
   reviewsObject,
   fetchReviewsByCoworkingSpaceId,
-} from "../api/coworkingSpaceReviews";
-import { starIconColor } from "./ResultCard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { FaStar } from "react-icons/fa";
-import Image from "react-bootstrap/Image";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import "../styles/CoworkingSpaceDetails.css";
-import Review from "./Review";
+} from '../api/coworkingSpaceReviews';
+import { starIconColor } from './ResultCard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import {
+  FaCouch,
+  FaStar,
+  FaWifi,
+  FaDollarSign,
+  FaHeadphones,
+} from 'react-icons/fa';
+import Image from 'react-bootstrap/Image';
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Accordion from 'react-bootstrap/Accordion';
+import '../styles/CoworkingSpaceDetails.css';
+import Review from './Review';
 
 interface coworkingSpaceDetailsProps {
   currentCoworkingSpace: coworkingResultsObject | undefined;
@@ -155,6 +162,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                   if (user) {
                     setIsReviewsPage(true); // Show reviews page if user is logged in
                   } else {
+
                     setPreviousView("detailsPage"); // Store the current view (before login)
                     setCurrentView("loginPage");
                   }
@@ -203,6 +211,97 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                           </div>
                           <p className="date">{date}</p>
                           <p className="content">{review.reviewText}</p>
+                          <Accordion>
+                            <Accordion.Item eventKey="0">
+                              <Accordion.Header>
+                                Detailed Review
+                              </Accordion.Header>
+                              <Accordion.Body>
+                                {review.netRating && review.netRating > 0 ? (
+                                  <>
+                                    <h6>Internet Rating</h6>
+                                    <div className="rating">
+                                      {stars.map((_, index) => (
+                                        <FaWifi
+                                          className="rating-icon"
+                                          key={index}
+                                          size={18}
+                                          color={
+                                            review.netRating != undefined &&
+                                            review.netRating > index
+                                              ? starColor.orange
+                                              : starColor.grey
+                                          }
+                                        />
+                                      ))}
+                                    </div>
+                                  </>
+                                ) : null}
+                                {review.comfortRating &&
+                                review.comfortRating > 0 ? (
+                                  <>
+                                    <h6>Comfort Rating</h6>
+                                    <div className="rating">
+                                      {stars.map((_, index) => (
+                                        <FaCouch
+                                          className="rating-icon"
+                                          key={index}
+                                          size={18}
+                                          color={
+                                            review.comfortRating != undefined &&
+                                            review.comfortRating > index
+                                              ? starColor.orange
+                                              : starColor.grey
+                                          }
+                                        />
+                                      ))}
+                                    </div>
+                                  </>
+                                ) : null}
+                                {review.noiseRating &&
+                                review.noiseRating > 0 ? (
+                                  <>
+                                    <h6>Noise Rating</h6>
+                                    <div className="rating">
+                                      {stars.map((_, index) => (
+                                        <FaHeadphones
+                                          className="rating-icon"
+                                          key={index}
+                                          size={18}
+                                          color={
+                                            review.noiseRating != undefined &&
+                                            review.noiseRating > index
+                                              ? starColor.orange
+                                              : starColor.grey
+                                          }
+                                        />
+                                      ))}
+                                    </div>
+                                  </>
+                                ) : null}
+                                {review.costRating && review.costRating > 0 ? (
+                                  <>
+                                    <h6>Price Rating</h6>
+                                    <div className="rating">
+                                      {stars.map((_, index) => (
+                                        <FaDollarSign
+                                          className="rating-icon"
+                                          key={index}
+                                          size={18}
+                                          color={
+                                            review.costRating != undefined &&
+                                            review.costRating > index
+                                              ? starColor.orange
+                                              : starColor.grey
+                                          }
+                                        />
+                                      ))}
+                                    </div>
+                                  </>
+                                ) : null}
+                              </Accordion.Body>
+                            </Accordion.Item>
+                          </Accordion>
                         </div>
                       );
                     })}
