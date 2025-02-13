@@ -1,7 +1,7 @@
 :root {
-  --global-color-primary: #65558f;
-  --global-color-primary-muted: #4f4a70;
-  --global-color-secondary: #bdede0;
+  --global-color-primary: #00ECA2;
+  --global-color-primary-muted: #00C0EC;
+  --global-color-secondary: #EC004A;
 }
 
 body {

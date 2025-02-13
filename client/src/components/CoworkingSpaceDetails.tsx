@@ -1,30 +1,30 @@
-import { useEffect, useState } from 'react';
-import { coworkingResultsObject } from './App';
+import { useEffect, useState } from "react";
+import { coworkingResultsObject } from "./App";
 import {
   reviewsObject,
   fetchReviewsByCoworkingSpaceId,
-} from '../api/coworkingSpaceReviews';
-import { starIconColor } from './ResultCard';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+} from "../api/coworkingSpaceReviews";
+import { starIconColor } from "./ResultCard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
   faSquareCheck,
   faSquareXmark,
-} from '@fortawesome/free-solid-svg-icons';
+} from "@fortawesome/free-solid-svg-icons";
 import {
   FaCouch,
   FaStar,
   FaWifi,
   FaDollarSign,
   FaHeadphones,
-} from 'react-icons/fa';
-import Image from 'react-bootstrap/Image';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Accordion from 'react-bootstrap/Accordion';
-import '../styles/CoworkingSpaceDetails.css';
-import Review from './Review';
+} from "react-icons/fa";
+import Image from "react-bootstrap/Image";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Accordion from "react-bootstrap/Accordion";
+import "../styles/CoworkingSpaceDetails.css";
+import Review from "./Review";
 
 interface coworkingSpaceDetailsProps {
   currentCoworkingSpace: coworkingResultsObject | undefined;
@@ -55,13 +55,13 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
     if (currentCoworkingSpace && currentCoworkingSpace.id) {
       fetchReviewsByCoworkingSpaceId(`reviews/${currentCoworkingSpace.id}`)
         .then((data) => setReviews(Array.isArray(data) ? data : []))
-        .catch((error) => console.error('Error fetching reviews:', error));
+        .catch((error) => console.error("Error fetching reviews:", error));
     }
   }, [currentCoworkingSpace]);
 
   // If the previous view was the login page, show the review page
   useEffect(() => {
-    if (previousView === 'loginPage') {
+    if (previousView === "loginPage") {
       setIsReviewsPage(true);
     }
   }, [previousView]);
@@ -69,12 +69,12 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
   const stars: number[] = [0, 0, 0, 0, 0];
 
   const starColor: starIconColor = {
-    orange: '#F2C265',
-    grey: 'a9a9a9',
+    orange: "#F2C265",
+    grey: "#a9a9a9",
   };
 
   // Formatter for the rating to always display 2 decimal places
-  const formattedRating = new Intl.NumberFormat('en-US', {
+  const formattedRating = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -90,7 +90,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
         <div>
           {/* Allows for easy navigation back to the search results */}
           <Breadcrumb>
-            <Breadcrumb.Item onClick={() => setCurrentView('resultsPage')}>
+            <Breadcrumb.Item onClick={() => setCurrentView("resultsPage")}>
               {searchedCity}
             </Breadcrumb.Item>
             <Breadcrumb.Item active>
@@ -105,7 +105,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
               fluid
               rounded
               className="img-fluid" // ensures photo display is responsive
-              style={{ maxWidth: '600px', height: 'auto' }}
+              style={{ maxWidth: "600px", height: "auto" }}
             />
           )}
 
@@ -160,63 +160,62 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
               {/* Render button to allow the user to post a review */}
               <p className="post-review">Are you a member?</p>
               <Button
-  className="primaryOutline post-review-button"
-  onClick={async () => {
-    console.log(user);
-    if (!user) {
-      setPreviousView("detailsPage");
-      setCurrentView("loginPage");
-      return;
-    }
+                className="primaryOutline post-review-button"
+                onClick={async () => {
+                  console.log(user);
+                  if (!user) {
+                    setPreviousView("detailsPage");
+                    setCurrentView("loginPage");
+                    return;
+                  }
 
-    // User is logged in, check for existing review
-    const userId = localStorage.getItem('uuid');
-    
-    try {
-      // Get ID from currentCoworkingSpace prop
-      const coworkingId = currentCoworkingSpace?.id;
-      
-      if (!coworkingId) {
-        console.error('No coworking space ID found');
-        return;
-      }
+                  // User is logged in, check for existing review
+                  const userId = localStorage.getItem("uuid");
 
-      const response = await fetch('/reviews/check', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          coworkingId
-        })
-      });
+                  try {
+                    // Get ID from currentCoworkingSpace prop
+                    const coworkingId = currentCoworkingSpace?.id;
 
-      // Handle 404 case (location not in database yet)
-      if (response.status === 404) {
-        setIsReviewsPage(true);
-        return;
-      }
+                    if (!coworkingId) {
+                      console.error("No coworking space ID found");
+                      return;
+                    }
 
-      const data = await response.json();
-      
-      if (data.hasReviewed) {
-        alert('You have already reviewed this co-working space');
-        return;
-      }
+                    const response = await fetch("/reviews/check", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        userId,
+                        coworkingId,
+                      }),
+                    });
 
-      // if we've made it here, the user can post a review. yay!
-      setIsReviewsPage(true);
+                    // Handle 404 case (location not in database yet)
+                    if (response.status === 404) {
+                      setIsReviewsPage(true);
+                      return;
+                    }
 
-    } catch (error) {
-      console.log('Review check error:', error.message); // not sure what's causing this type error
-      // if there's an error in checking, allow the review anyway
-      setIsReviewsPage(true);
-    }
-  }}
->
-  POST A REVIEW
-</Button>
+                    const data = await response.json();
+
+                    if (data.hasReviewed) {
+                      alert("You have already reviewed this co-working space");
+                      return;
+                    }
+
+                    // if we've made it here, the user can post a review. yay!
+                    setIsReviewsPage(true);
+                  } catch (error) {
+                    console.log("Review check error:", error.message); // not sure what's causing this type error
+                    // if there's an error in checking, allow the review anyway
+                    setIsReviewsPage(true);
+                  }
+                }}
+              >
+                POST A REVIEW
+              </Button>
               {/* Display recent reviews */}
               {reviews.length > 0 && (
                 <div className="reviews-container">
@@ -228,10 +227,10 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
 
                       const date: string = new Date(
                         review.datePosted
-                      ).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
+                      ).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
                       });
                       return (
                         <div key={review.username} className="single-review">
@@ -349,7 +348,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                                 <div className="amenities">
                                   {review.hasPrivateRooms ? (
                                     <p>
-                                      Private rooms:{' '}
+                                      Private rooms:{" "}
                                       <FontAwesomeIcon
                                         icon={faSquareCheck}
                                         color="green"
@@ -357,13 +356,13 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                                     </p>
                                   ) : (
                                     <p>
-                                      Private rooms:{' '}
+                                      Private rooms:{" "}
                                       <FontAwesomeIcon icon={faSquareXmark} />
                                     </p>
                                   )}
                                   {review.hasCafe ? (
                                     <p>
-                                      Cafe:{' '}
+                                      Cafe:{" "}
                                       <FontAwesomeIcon
                                         icon={faSquareCheck}
                                         color="green"
@@ -371,7 +370,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                                     </p>
                                   ) : (
                                     <p>
-                                      Cafe:{' '}
+                                      Cafe:{" "}
                                       <FontAwesomeIcon
                                         icon={faSquareXmark}
                                         color="red"
@@ -380,7 +379,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                                   )}
                                   {review.hasParking ? (
                                     <p>
-                                      Parking:{' '}
+                                      Parking:{" "}
                                       <FontAwesomeIcon
                                         icon={faSquareCheck}
                                         color="green"
@@ -388,7 +387,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                                     </p>
                                   ) : (
                                     <p>
-                                      Parking:{' '}
+                                      Parking:{" "}
                                       <FontAwesomeIcon
                                         icon={faSquareXmark}
                                         color="red"
@@ -397,7 +396,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                                   )}
                                   {review.hasAircon ? (
                                     <p>
-                                      Aircon:{' '}
+                                      Aircon:{" "}
                                       <FontAwesomeIcon
                                         icon={faSquareCheck}
                                         color="green"
@@ -405,7 +404,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                                     </p>
                                   ) : (
                                     <p>
-                                      Aircon:{' '}
+                                      Aircon:{" "}
                                       <FontAwesomeIcon
                                         icon={faSquareXmark}
                                         color="red"
