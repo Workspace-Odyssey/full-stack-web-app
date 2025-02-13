@@ -11,6 +11,10 @@ exports.up = async function (knex) {
     table.integer('comfort_rating');
     table.integer('noise_rating');
     table.integer('cost_rating');
+    table.boolean('has_private_rooms');
+    table.boolean('has_cafe');
+    table.boolean('has_parking');
+    table.boolean('has_aircon');
     table
       .uuid('user_id')
       .references('uuid')

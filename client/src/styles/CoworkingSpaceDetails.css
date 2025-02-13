@@ -86,3 +86,8 @@
 .post-review-button {
   margin-bottom: 100px;
 }
+
+.amenities {
+  display: flex;
+  gap: 15px;
+}

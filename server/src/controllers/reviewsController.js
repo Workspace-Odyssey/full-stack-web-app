@@ -30,6 +30,10 @@ async function submitReview(req, res) {
       comfortRating,
       noiseRating,
       costRating,
+      hasPrivateRooms,
+      hasCafe,
+      hasParking,
+      hasAircon,
     } = req.body;
 
     console.log('BODY', req.body);
@@ -45,6 +49,10 @@ async function submitReview(req, res) {
       comfort_rating: comfortRating,
       noise_rating: noiseRating,
       cost_rating: costRating,
+      has_private_rooms: hasPrivateRooms,
+      has_cafe: hasCafe,
+      has_parking: hasParking,
+      has_aircon: hasAircon,
     });
     res.json({ message: 'Review submitted successfully' });
   } catch (error) {

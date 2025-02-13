@@ -13,6 +13,10 @@ const validateProps = validProps([
   'comfort_rating',
   'noise_rating',
   'cost_rating',
+  'has_private_rooms',
+  'has_cafe',
+  'has_parking',
+  'has_aircon',
 ]);
 
 const validateRequired = requiredProps([
@@ -59,6 +63,10 @@ module.exports = {
         comfortRating: `${REVIEW_TABLE}.comfort_rating`,
         noiseRating: `${REVIEW_TABLE}.noise_rating`,
         costRating: `${REVIEW_TABLE}.cost_rating`,
+        hasPrivateRooms: `${REVIEW_TABLE}.has_private_rooms`,
+        hasCafe: `${REVIEW_TABLE}.has_cafe`,
+        hasParking: `${REVIEW_TABLE}.has_parking`,
+        hasAircon: `${REVIEW_TABLE}.has_aircon`,
         username: 'u.username',
       })
       .from(REVIEW_TABLE)
