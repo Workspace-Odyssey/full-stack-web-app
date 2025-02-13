@@ -30,13 +30,15 @@ if (!isProduction) {
   );
 }
 
+console.log('NODE ENV', process.env.NODE_ENV);
+
 app.use(
   session({
     secret: process.env.EXPSECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === 'production',
+      secure: false,
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24, // Set the cookie expiration to 1 day
       sameSite: 'lax',
