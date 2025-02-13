@@ -130,7 +130,9 @@ function App() {
                 ) : (
                   // If results are available, display them
                   <>
-                    <h3>Coworking Spaces in {searchedCity.toLocaleUpperCase()}</h3>
+                    <h3>
+                      Coworking Spaces in {searchedCity.toLocaleUpperCase()}
+                    </h3>
                     <div className="resultsHeader">
                       <i className="bi bi-geo-alt-fill"></i>
                       <p>{searchResults.length} Results</p>
@@ -151,6 +153,7 @@ function App() {
                               id={location.id}
                               address={location.address}
                               setCurrentView={setCurrentView}
+                              setPreviousView={setPreviousView}
                               setCurrentCoworkingSpace={
                                 setCurrentCoworkingSpace
                               }

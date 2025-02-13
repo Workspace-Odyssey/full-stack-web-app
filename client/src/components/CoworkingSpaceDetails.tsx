@@ -63,6 +63,10 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
   useEffect(() => {
     if (previousView === 'loginPage') {
       setIsReviewsPage(true);
+    } else if (previousView === 'resultCardView') {
+      setIsReviewsPage(false);
+    } else if (previousView === 'resultCardReview') {
+      setIsReviewsPage(true);
     }
   }, [previousView]);
 
@@ -70,7 +74,7 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
 
   const starColor: starIconColor = {
     orange: '#F2C265',
-    grey: 'a9a9a9',
+    grey: '#a9a9a9',
   };
 
   // Formatter for the rating to always display 2 decimal places
@@ -160,63 +164,62 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
               {/* Render button to allow the user to post a review */}
               <p className="post-review">Are you a member?</p>
               <Button
-  className="primaryOutline post-review-button"
-  onClick={async () => {
-    console.log(user);
-    if (!user) {
-      setPreviousView("detailsPage");
-      setCurrentView("loginPage");
-      return;
-    }
+                className="primaryOutline post-review-button"
+                onClick={async () => {
+                  console.log(user);
+                  if (!user) {
+                    setPreviousView('detailsPage');
+                    setCurrentView('loginPage');
+                    return;
+                  }
 
-    // User is logged in, check for existing review
-    const userId = localStorage.getItem('uuid');
-    
-    try {
-      // Get ID from currentCoworkingSpace prop
-      const coworkingId = currentCoworkingSpace?.id;
-      
-      if (!coworkingId) {
-        console.error('No coworking space ID found');
-        return;
-      }
+                  // User is logged in, check for existing review
+                  const userId = localStorage.getItem('uuid');
 
-      const response = await fetch('/reviews/check', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          coworkingId
-        })
-      });
+                  try {
+                    // Get ID from currentCoworkingSpace prop
+                    const coworkingId = currentCoworkingSpace?.id;
 
-      // Handle 404 case (location not in database yet)
-      if (response.status === 404) {
-        setIsReviewsPage(true);
-        return;
-      }
+                    if (!coworkingId) {
+                      console.error('No coworking space ID found');
+                      return;
+                    }
 
-      const data = await response.json();
-      
-      if (data.hasReviewed) {
-        alert('You have already reviewed this co-working space');
-        return;
-      }
+                    const response = await fetch('/reviews/check', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        userId,
+                        coworkingId,
+                      }),
+                    });
 
-      // if we've made it here, the user can post a review. yay!
-      setIsReviewsPage(true);
+                    // Handle 404 case (location not in database yet)
+                    if (response.status === 404) {
+                      setIsReviewsPage(true);
+                      return;
+                    }
 
-    } catch (error) {
-      console.log('Review check error:', error.message); // not sure what's causing this type error
-      // if there's an error in checking, allow the review anyway
-      setIsReviewsPage(true);
-    }
-  }}
->
-  POST A REVIEW
-</Button>
+                    const data = await response.json();
+
+                    if (data.hasReviewed) {
+                      alert('You have already reviewed this co-working space');
+                      return;
+                    }
+
+                    // if we've made it here, the user can post a review. yay!
+                    setIsReviewsPage(true);
+                  } catch (error) {
+                    console.log('Review check error:', error.message); // not sure what's causing this type error
+                    // if there's an error in checking, allow the review anyway
+                    setIsReviewsPage(true);
+                  }
+                }}
+              >
+                POST A REVIEW
+              </Button>
               {/* Display recent reviews */}
               {reviews.length > 0 && (
                 <div className="reviews-container">
@@ -358,7 +361,10 @@ const CoworkingSpaceDetails: React.FC<coworkingSpaceDetailsProps> = ({
                                   ) : (
                                     <p>
                                       Private rooms:{' '}
-                                      <FontAwesomeIcon icon={faSquareXmark} />
+                                      <FontAwesomeIcon
+                                        icon={faSquareXmark}
+                                        color="red"
+                                      />
                                     </p>
                                   )}
                                   {review.hasCafe ? (
