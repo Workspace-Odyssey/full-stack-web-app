@@ -148,7 +148,9 @@ const ResultCard: React.FC<ResultCardProps> = ({
                     return { canReview: true };
                   } catch (error) {
                     // Log error but don't throw
-                    console.log('Review check returned:', error.message); // not sure what's causing this type error
+                    if (error instanceof Error) {
+                      console.log('Review check returned:', error.message); // not sure what's causing this type error
+                    }
                     return { canReview: true };
                   }
                 };
