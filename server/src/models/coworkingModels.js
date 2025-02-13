@@ -30,6 +30,10 @@ const Coworking = {
         validateRequired(data);
         validateProps(data)
         return knex('coworkings').insert(data).returning('*');
+    },
+
+    getRandomCoworkingSpaces: async () => {
+        return knex('coworkings').orderByRaw('RANDOM()').limit(5);
     }
 }
 

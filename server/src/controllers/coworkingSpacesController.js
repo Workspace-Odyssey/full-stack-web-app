@@ -131,8 +131,23 @@ async function getPhotoOfCoworkingSpace(req, res) {
   }
 }
 
+const getRandomCoworkingSpaces = asyncHandler(async (req, res) => {
+  try {
+    const randomCoworkingSpaces = await Coworking.getRandomCoworkingSpaces();
+    const coworkingSpacesWithReviews = await Promise.all(randomCoworkingSpaces.map(async (coworkingSpace) => {
+      const reviews = await Reviews.filterByCoWorkingId(coworkingSpace.uuid);
+      return { ...coworkingSpace, reviews };
+    }));
+    res.json(coworkingSpacesWithReviews);
+  } catch (error) {
+    console.error('Error fetching random coworking spaces:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 module.exports = {
   getNearbyCoworkingSpaces,
   registerCoworkingSpace,
   getPhotoOfCoworkingSpace,
+  getRandomCoworkingSpaces,
 };
