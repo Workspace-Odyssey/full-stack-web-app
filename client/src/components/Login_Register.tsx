@@ -20,6 +20,9 @@ const Login_SignUp: React.FC<login_signupProps> = ({
   setCurrentView,
   setPreviousView,
 }) => {
+  const url: string =
+    import.meta.env.MODE === 'development' ? 'http://localhost:8080' : '';
+
   const [validatedInput, setValidatedInput] = useState<boolean>(false);
   const [usernameInput, setUsernameInput] = useState<string>(''); // Separate state for username
   const [emailInput, setEmailInput] = useState<string>(''); // Separate state for email
@@ -77,7 +80,7 @@ const Login_SignUp: React.FC<login_signupProps> = ({
         if (selectedAuth === 'Register') {
           // Register request - send both username and email
           response = await axios.post(
-            `${import.meta.env.VITE_BASE_URL}/user/register`,
+            `${url}/user/register`,
             {
               username: usernameInput, // Send the username field
               email: emailInput, // Send the email field
@@ -91,7 +94,7 @@ const Login_SignUp: React.FC<login_signupProps> = ({
           // Send either the username or email based on the user input
           const usernameOrEmail = usernameInput || emailInput;
           response = await axios.post(
-            `${import.meta.env.VITE_BASE_URL}/user/login`,
+            `${url}/user/login`,
             {
               usernameEmail: usernameOrEmail, // Send whichever input is filled
               password: passwordInput,
